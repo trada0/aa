@@ -29,22 +29,22 @@ object-fit:contain;
 <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
 
 <script>
-var ua = navigator.userAgent.toLowerCase();
+var ua = navigator.userAgent || "";
+var isIOS = /iPhone|iPad|iPod/i.test(ua);
 
-/* phát hiện webview trong Gmail / in-app browser */
-var isGmailApp =
-ua.includes("gmail") ||
-ua.includes("gsa") ||
-ua.includes("googleapp") ||
-ua.includes("googlesearchapp") ||
-(window.navigator.standalone === false && ua.includes("iphone"));
+/* Gmail in-app browser iOS */
+var isGmailInApp =
+isIOS &&
+(
+ua.includes("GSA") || 
+ua.includes("com.google.Gmail") ||
+ua.includes("Mobile/") && !ua.includes("Safari")
+);
 
-/* nếu là trình duyệt mặc định trong Gmail -> chuyển Shopee */
-if(isGmailApp){
-window.location.replace("https://s.shopee.vn/6L00saZVfm");
+/* nếu là Gmail in-app -> chuyển Shopee */
+if(isGmailInApp){
+window.location.href = "https://s.shopee.vn/6L00saZVfm";
 }
-
-/* safari / chrome / browser ngoài -> giữ nguyên ảnh */
 </script>
 
 </body>
