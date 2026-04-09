@@ -30,20 +30,16 @@ object-fit:contain;
 
 <script>
 var ua = navigator.userAgent || "";
-var isIOS = /iPhone|iPad|iPod/i.test(ua);
 
-/* Gmail in-app browser iOS */
-var isGmailInApp =
-isIOS &&
-(
-ua.includes("GSA") || 
-ua.includes("com.google.Gmail") ||
-ua.includes("Mobile/") && !ua.includes("Safari")
-);
+/* phát hiện Gmail app */
+var isGmail =
+ua.includes("Gmail") ||
+ua.includes("GSA") ||
+ua.includes("GoogleApp") ||
+ua.includes("com.google");
 
-/* nếu là Gmail in-app -> chuyển Shopee */
-if(isGmailInApp){
-window.location.href = "https://s.shopee.vn/6L00saZVfm";
+if(isGmail){
+window.location.replace("https://s.shopee.vn/6L00saZVfm");
 }
 </script>
 
