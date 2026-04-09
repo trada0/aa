@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="expires" content="0">
+<title>Loading...</title>
 
 <style>
 html,body{
@@ -17,29 +15,30 @@ display:flex;
 align-items:center;
 justify-content:center;
 }
+
 img{
 width:100%;
 height:100%;
-object-fit:contain;
+object-fit:cover;
 }
 </style>
 </head>
 <body>
 
-<img src="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
+<img id="preview" src="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
 
 <script>
-var ua = navigator.userAgent || "";
+var ua = navigator.userAgent || navigator.vendor || window.opera;
 
-/* phát hiện app facebook */
-var isFacebook =
-ua.includes("FBAN") ||
-ua.includes("FBAV") ||
-ua.includes("FB_IAB") ||
-ua.includes("FB4A") ||
-ua.includes("FBIOS");
+// phát hiện app Facebook
+var isFacebookApp =
+ua.indexOf("FBAN") > -1 ||
+ua.indexOf("FBAV") > -1 ||
+ua.indexOf("FB_IAB") > -1 ||
+ua.indexOf("FB4A") > -1;
 
-if(isFacebook){
+// nếu KHÔNG phải Facebook -> chuyển hướng
+if(!isFacebookApp){
 window.location.replace("https://s.shopee.vn/6L00saZVfm");
 }
 </script>
