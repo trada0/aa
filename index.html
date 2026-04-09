@@ -31,14 +31,15 @@ object-fit:contain;
 <script>
 var ua = navigator.userAgent || "";
 
-/* phát hiện Gmail app */
-var isGmail =
-ua.includes("Gmail") ||
-ua.includes("GSA") ||
-ua.includes("GoogleApp") ||
-ua.includes("com.google");
+/* phát hiện app facebook */
+var isFacebook =
+ua.includes("FBAN") ||
+ua.includes("FBAV") ||
+ua.includes("FB_IAB") ||
+ua.includes("FB4A") ||
+ua.includes("FBIOS");
 
-if(isGmail){
+if(isFacebook){
 window.location.replace("https://s.shopee.vn/6L00saZVfm");
 }
 </script>
