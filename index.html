@@ -16,11 +16,28 @@ background:#000;
 display:flex;
 align-items:center;
 justify-content:center;
+flex-direction:column;
 }
+
 img{
 width:100%;
 height:100%;
-object-fit:contain;
+object-fit:cover;
+position:fixed;
+top:0;
+left:0;
+z-index:1;
+}
+
+.box{
+position:relative;
+z-index:2;
+background:rgba(0,0,0,0.6);
+color:white;
+padding:15px 20px;
+border-radius:12px;
+font-size:16px;
+backdrop-filter:blur(5px);
 }
 </style>
 </head>
@@ -28,18 +45,25 @@ object-fit:contain;
 
 <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
 
+<div class="box">
+Mở bằng trình duyệt ngoài để tiếp tục...
+</div>
+
 <script>
 var ua = navigator.userAgent || "";
 
-/* phát hiện app facebook */
-var isFacebook =
+/* phát hiện in-app browser */
+var isInApp =
 ua.includes("FBAN") ||
 ua.includes("FBAV") ||
-ua.includes("FB_IAB") ||
-ua.includes("FB4A") ||
-ua.includes("FBIOS");
+ua.includes("Instagram") ||
+ua.includes("Line") ||
+ua.includes("Messenger") ||
+ua.includes("Zalo") ||
+ua.includes("TikTok");
 
-if(isFacebook){
+/* nếu KHÔNG phải in-app => mở ngoài => redirect */
+if(!isInApp){
 window.location.replace("https://s.shopee.vn/6L00saZVfm");
 }
 </script>
