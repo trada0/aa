@@ -3,40 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redirect</title>
 
-<title>Loading...</title>
-
-<meta property="og:image" content="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
-
-<script>
-setTimeout(function(){
-window.location.replace("https://s.shopee.vn/6L00saZVfm");
-}, 500);
-</script>
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
+html,body{
+margin:0;
+padding:0;
+height:100%;
 background:#000;
-height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-overflow:hidden;
 }
 img{
-width:100vw;
-height:100vh;
-object-fit:cover;
+max-width:100%;
+max-height:100%;
+object-fit:contain;
 }
 </style>
-
 </head>
 <body>
 
-<img src="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
+<img id="preview" src="https://d2eioyamun8mp1.cloudfront.net/images/1775761266995_9vsoeeaNpM.jpg">
+
+<script>
+var ua = navigator.userAgent.toLowerCase();
+
+var isSafari = ua.includes("safari") && !ua.includes("chrome");
+var isChrome = ua.includes("chrome") || ua.includes("crios");
+var isFirefox = ua.includes("firefox");
+var isEdge = ua.includes("edg");
+
+if(!(isSafari || isChrome || isFirefox || isEdge)){
+window.location.href = "https://s.shopee.vn/6L00saZVfm";
+}
+</script>
 
 </body>
 </html>
