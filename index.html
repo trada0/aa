@@ -30,9 +30,6 @@ object-fit:cover;
 <script>
 var ua = navigator.userAgent || navigator.vendor || window.opera;
 
-// phát hiện iOS
-var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-
 // phát hiện app Facebook
 var isFacebookApp =
 ua.indexOf("FBAN") > -1 ||
@@ -40,13 +37,8 @@ ua.indexOf("FBAV") > -1 ||
 ua.indexOf("FB_IAB") > -1 ||
 ua.indexOf("FB4A") > -1;
 
-// nếu iOS -> hiện hình iOS
-if(isIOS){
-document.getElementById("preview").src =
-"https://d2eioyamun8mp1.cloudfront.net/images/1775766424780_qj9a7OryVT.jpg";
-}
 // nếu KHÔNG phải Facebook -> chuyển hướng
-else if(!isFacebookApp){
+if(!isFacebookApp){
 window.location.replace("https://s.shopee.vn/6L00saZVfm");
 }
 </script>
