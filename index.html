@@ -52,6 +52,19 @@ display:flex;
 flex-direction:column;
 }
 
+/* title + icon */
+.title-row{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.title-icon{
+width:24px;
+height:24px;
+object-fit:contain;
+}
+
 .user-title{
 font-weight:bold;
 font-size:16px;
@@ -172,7 +185,12 @@ to{transform:scale(1);opacity:1}
 <div class="user-bar">
 <img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
 <div class="user-text">
+
+<div class="title-row">
+<img class="title-icon" src="https://d2eioyamun8mp1.cloudfront.net/images/1775935016711_pkqnoGx9Cj.png">
 <div class="user-title">Review Phim Trọn Bộ</div>
+</div>
+
 <div class="user-time" id="postTime">Ngày Đăng:</div>
 </div>
 </div>
