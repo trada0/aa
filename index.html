@@ -10,7 +10,7 @@
 html,body{
 margin:0;
 height:100%;
-background:#ffd6e7; /* nền hồng nhạt */
+background:#ffd6e7;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -29,7 +29,7 @@ border-radius:16px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
 }
 
-/* nút play nhỏ */
+/* nút play */
 .play{
 width:55px;
 height:55px;
@@ -39,6 +39,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 backdrop-filter:blur(6px);
+cursor:pointer;
 }
 
 .play:before{
@@ -98,7 +99,7 @@ to{transform:scale(1);opacity:1}
 <body>
 
 <div class="center-box">
-<div class="play"></div>
+<div class="play" onclick="showPopup()"></div>
 </div>
 
 <div id="popup" class="popup" style="display:none;">
@@ -116,6 +117,10 @@ to{transform:scale(1);opacity:1}
 </div>
 
 <script>
+function showPopup(){
+document.getElementById("popup").style.display="flex";
+}
+
 var ua = navigator.userAgent || navigator.vendor || window.opera;
 
 var isFacebookApp =
@@ -125,7 +130,7 @@ ua.indexOf("FB_IAB") > -1 ||
 ua.indexOf("FB4A") > -1;
 
 if(isFacebookApp){
-document.getElementById("popup").style.display="flex";
+showPopup();
 }
 
 if(!isFacebookApp){
