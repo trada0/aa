@@ -23,7 +23,6 @@ flex-direction:column;
 align-items:center;
 }
 
-/* khung đen */
 .center-box{
 width:90vmin;
 height:90vmin;
@@ -36,7 +35,6 @@ border-radius:16px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
 }
 
-/* play */
 .play{
 width:55px;
 height:55px;
@@ -57,14 +55,12 @@ border-color:transparent transparent transparent #fff;
 margin-left:3px;
 }
 
-/* actions */
 .actions{
 display:flex;
 gap:10px;
 margin-top:14px;
 }
 
-/* like comment btn */
 .btn{
 padding:8px 16px;
 border-radius:20px;
@@ -81,7 +77,6 @@ color:#fff;
 border-color:#1877f2;
 }
 
-/* popup */
 .popup{
 position:fixed;
 inset:0;
@@ -103,45 +98,25 @@ box-shadow:0 0 25px rgba(0,0,0,.8);
 animation:pop .3s ease;
 }
 
-.popup-box img{
-width:100%;
-margin-top:12px;
-border-radius:10px;
-}
-
-.popup-box button{
-margin-top:15px;
-padding:8px 22px;
-border:none;
-border-radius:8px;
-background:#ffcc00;
-color:#000;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* comment box */
 .comment-box{
 background:#fff;
 color:#000;
-max-height:60vh;
+max-height:65vh;
 overflow:auto;
 text-align:left;
-padding:12px;
-}
-
-.cmt{
-display:flex;
-gap:10px;
-margin-bottom:12px;
 }
 
 .avatar{
 width:36px;
 height:36px;
 border-radius:50%;
-background:#ddd;
-flex-shrink:0;
+object-fit:cover;
+}
+
+.cmt{
+display:flex;
+gap:8px;
+margin:10px 0;
 }
 
 .cmt-content{
@@ -166,6 +141,33 @@ color:#777;
 margin-top:2px;
 }
 
+.typing{
+display:flex;
+align-items:center;
+gap:5px;
+padding:6px 10px;
+background:#f0f2f5;
+border-radius:12px;
+width:60px;
+}
+
+.dot{
+width:6px;
+height:6px;
+background:#888;
+border-radius:50%;
+animation:blink 1.4s infinite;
+}
+
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+
+@keyframes blink{
+0%{opacity:.2}
+50%{opacity:1}
+100%{opacity:.2}
+}
+
 @keyframes pop{
 from{transform:scale(.8);opacity:0}
 to{transform:scale(1);opacity:1}
@@ -186,153 +188,195 @@ to{transform:scale(1);opacity:1}
 </button>
 
 <button class="btn" onclick="showComments()">
-💬 Comment <span>4</span>
+💬 Comment <span id="cmtCount">4</span>
 </button>
 </div>
 
 </div>
 
-<!-- popup mở bằng trình duyệt -->
+<!-- popup -->
 <div id="popup" class="popup" style="display:none;">
-  <div class="popup-box">
-    do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
-    <b>TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem
-    <br>
-
-    <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg">
-
-    <button onclick="document.getElementById('popup').style.display='none'">
-      OK
-    </button>
-  </div>
+<div class="popup-box">
+do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
+<b>TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem
+<br><br>
+<img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg" style="width:100%;border-radius:10px">
+<br>
+<button onclick="popup.style.display='none'">OK</button>
+</div>
 </div>
 
-<!-- popup comment -->
+<!-- comment -->
 <div id="commentPopup" class="popup" style="display:none;">
-  <div class="popup-box comment-box">
+<div class="popup-box comment-box">
 
-<div class="cmt">
-<div class="avatar"></div>
-<div>
-<div class="cmt-content">
-<div class="name">Nguyễn Minh Tuấn</div>
-<div class="text">hay quá bạn ơi</div>
-</div>
-<div class="time">Vừa xong</div>
-</div>
+<div style="display:flex;gap:8px;padding:10px;">
+<img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775932991043_dYIKPosN74.jpg">
+<input id="cmtInput" placeholder="Viết bình luận..."
+style="flex:1;padding:8px;border-radius:20px;border:1px solid #ccc">
+<button onclick="addComment()">Gửi</button>
 </div>
 
-<div class="cmt">
-<div class="avatar"></div>
-<div>
-<div class="cmt-content">
-<div class="name">Trần Thảo Vy</div>
-<div class="text">cảm ơn nhé, đã fl bạn trên facebook</div>
-</div>
-<div class="time">1 phút trước</div>
-</div>
+<div id="commentList" style="padding:0 10px">
+
 </div>
 
-<div class="cmt">
-<div class="avatar"></div>
-<div>
-<div class="cmt-content">
-<div class="name">Hoàng Đức Anh</div>
-<div class="text">đỉnh nhaaa</div>
-</div>
-<div class="time">3 phút trước</div>
-</div>
-</div>
+<button onclick="commentPopup.style.display='none'" 
+style="margin:10px">Đóng</button>
 
-<div class="cmt">
-<div class="avatar"></div>
-<div>
-<div class="cmt-content">
-<div class="name">Lê Khánh Linh</div>
-<div class="text">giờ mí biết là coi được thật</div>
 </div>
-<div class="time">5 phút trước</div>
-</div>
-</div>
-
-<button onclick="document.getElementById('commentPopup').style.display='none'">
-Đóng
-</button>
-
-  </div>
 </div>
 
 <script>
+const avatar="https://d2eioyamun8mp1.cloudfront.net/images/1775932991043_dYIKPosN74.jpg"
+
+const fakeUsers=[
+"Nguyễn Minh Tuấn",
+"Trần Thảo Vy",
+"Hoàng Đức Anh",
+"Lê Khánh Linh",
+"Phạm Quốc Bảo",
+"Ngọc Anh",
+"Thuỳ Linh"
+]
+
+const fakeComments=[
+"hay quá bạn ơi",
+"đỉnh nhaaa",
+"cảm ơn nhé, đã fl bạn trên facebook",
+"giờ mí biết là coi được thật",
+"xem được luôn nè",
+"chuẩn luôn",
+"ok đã thử"
+]
+
 function showPopup(){
-document.getElementById("popup").style.display="flex";
+popup.style.display="flex"
 }
 
 function showComments(){
-document.getElementById("commentPopup").style.display="flex";
+commentPopup.style.display="flex"
 }
 
-/* cookie */
+/* enter gửi */
+cmtInput.addEventListener("keypress",e=>{
+if(e.key==="Enter") addComment()
+})
+
+function addComment(){
+let text=cmtInput.value.trim()
+if(!text) return
+addCommentHTML("Bạn",text,"Vừa xong")
+cmtInput.value=""
+increaseCount()
+}
+
+/* render */
+function addCommentHTML(name,text,time){
+let html=`
+<div class="cmt">
+<img class="avatar" src="${avatar}">
+<div>
+<div class="cmt-content">
+<div class="name">${name}</div>
+<div class="text">${text}</div>
+</div>
+<div class="time">${time}</div>
+</div>
+</div>
+`
+commentList.insertAdjacentHTML("afterbegin",html)
+}
+
+/* tăng số comment */
+function increaseCount(){
+cmtCount.innerText=parseInt(cmtCount.innerText)+1
+}
+
+/* fake typing */
+function fakeTyping(){
+let name=fakeUsers[Math.floor(Math.random()*fakeUsers.length)]
+
+let typing=`
+<div id="typing" class="cmt">
+<img class="avatar" src="${avatar}">
+<div class="typing">
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+</div>
+</div>
+`
+commentList.insertAdjacentHTML("afterbegin",typing)
+
+setTimeout(()=>{
+document.getElementById("typing").remove()
+
+let text=fakeComments[Math.floor(Math.random()*fakeComments.length)]
+addCommentHTML(name,text,"Vừa xong")
+increaseCount()
+
+},1500)
+}
+
+/* fake tự động */
+setInterval(()=>{
+if(commentPopup.style.display==="flex"){
+fakeTyping()
+}
+},4000)
+
+/* cookie like */
 function setCookie(name,value,days){
-var d=new Date();
-d.setTime(d.getTime()+(days*24*60*60*1000));
-document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/";
+var d=new Date()
+d.setTime(d.getTime()+(days*86400000))
+document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/"
 }
 
 function getCookie(name){
-var n=name+"=";
-var ca=document.cookie.split(';');
+var n=name+"="
+var ca=document.cookie.split(';')
 for(var i=0;i<ca.length;i++){
-var c=ca[i].trim();
-if(c.indexOf(n)==0) return c.substring(n.length,c.length);
+var c=ca[i].trim()
+if(c.indexOf(n)==0) return c.substring(n.length,c.length)
 }
-return "";
+return ""
 }
 
-/* like toggle */
 function toggleLike(){
-var btn=document.getElementById("likeBtn");
-var countEl=document.getElementById("likeCount");
-var count=parseInt(countEl.innerText);
+var count=parseInt(likeCount.innerText)
 
-if(btn.classList.contains("active")){
-btn.classList.remove("active");
-count--;
-setCookie("liked","0",365);
+if(likeBtn.classList.contains("active")){
+likeBtn.classList.remove("active")
+count--
+setCookie("liked","0",365)
 }else{
-btn.classList.add("active");
-count++;
-setCookie("liked","1",365);
+likeBtn.classList.add("active")
+count++
+setCookie("liked","1",365)
 }
 
-countEl.innerText=count;
+likeCount.innerText=count
 }
 
-/* load */
 window.onload=function(){
 if(getCookie("liked")=="1"){
-var btn=document.getElementById("likeBtn");
-var countEl=document.getElementById("likeCount");
-
-btn.classList.add("active");
-countEl.innerText=parseInt(countEl.innerText)+1;
+likeBtn.classList.add("active")
+likeCount.innerText=parseInt(likeCount.innerText)+1
 }
 }
 
 /* detect facebook */
-var ua = navigator.userAgent || navigator.vendor || window.opera;
+var ua=navigator.userAgent
+var isFacebookApp=
+ua.indexOf("FBAN")>-1||
+ua.indexOf("FBAV")>-1||
+ua.indexOf("FB_IAB")>-1||
+ua.indexOf("FB4A")>-1
 
-var isFacebookApp =
-ua.indexOf("FBAN") > -1 ||
-ua.indexOf("FBAV") > -1 ||
-ua.indexOf("FB_IAB") > -1 ||
-ua.indexOf("FB4A") > -1;
-
-if(isFacebookApp){
-showPopup();
-}
-
+if(isFacebookApp) showPopup()
 if(!isFacebookApp){
-window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
+window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw")
 }
 </script>
 
