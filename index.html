@@ -36,6 +36,7 @@ border-radius:14px;
 background:rgba(255,255,255,.6);
 min-height:70px;
 box-shadow:0 3px 10px rgba(0,0,0,.15);
+cursor:pointer;
 }
 
 .avatar{
@@ -69,7 +70,6 @@ width:auto;
 object-fit:contain;
 }
 
-/* thời gian */
 .user-time{
 font-size:13px;
 color:#444;
@@ -132,6 +132,7 @@ color:#fff;
 border-color:#ff2e63;
 }
 
+/* popup chung */
 .popup{
 position:fixed;
 inset:0;
@@ -159,6 +160,21 @@ margin-top:12px;
 border-radius:10px;
 }
 
+/* popup profile */
+.profile-popup img{
+width:90px;
+height:90px;
+border-radius:50%;
+object-fit:cover;
+display:block;
+margin:0 auto 10px;
+}
+
+.profile-popup .name{
+font-size:18px;
+font-weight:bold;
+}
+
 .ok-btn{
 margin-top:18px;
 padding:14px 40px;
@@ -182,7 +198,7 @@ to{transform:scale(1);opacity:1}
 
 <div class="wrapper">
 
-<div class="user-bar">
+<div class="user-bar" onclick="showProfilePopup()">
 <img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
 
 <div class="user-text">
@@ -206,6 +222,7 @@ to{transform:scale(1);opacity:1}
 
 </div>
 
+<!-- popup video -->
 <div id="popup" class="popup" style="display:none;">
   <div class="popup-box">
     do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
@@ -221,9 +238,26 @@ to{transform:scale(1);opacity:1}
   </div>
 </div>
 
+<!-- popup profile -->
+<div id="profilePopup" class="popup" style="display:none;">
+  <div class="popup-box profile-popup">
+    <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
+    <div class="name">Review Phim Trọn Bộ</div>
+    <button class="ok-btn" onclick="closeProfile()">OK</button>
+  </div>
+</div>
+
 <script>
 function showPopup(){
 document.getElementById("popup").style.display="flex";
+}
+
+function showProfilePopup(){
+document.getElementById("profilePopup").style.display="flex";
+}
+
+function closeProfile(){
+document.getElementById("profilePopup").style.display="none";
 }
 
 function setCookie(name,value,days){
