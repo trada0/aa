@@ -23,18 +23,24 @@ flex-direction:column;
 align-items:center;
 }
 
-/* header user */
+/* khung user */
 .user-bar{
 width:90vmin;
 display:flex;
 align-items:center;
 gap:12px;
-margin-bottom:10px;
+margin-bottom:12px;
+padding:12px 14px;
+border:2px solid rgba(0,0,0,.25);
+border-radius:14px;
+background:rgba(255,255,255,.6);
+min-height:70px;
+box-shadow:0 3px 10px rgba(0,0,0,.15);
 }
 
 .avatar{
-width:48px;
-height:48px;
+width:50px;
+height:50px;
 border-radius:50%;
 object-fit:cover;
 border:3px solid #fff;
@@ -54,6 +60,7 @@ font-size:16px;
 .user-time{
 font-size:13px;
 color:#444;
+margin-top:2px;
 }
 
 /* khung đen */
@@ -245,7 +252,6 @@ btn.classList.add("active");
 countEl.innerText=parseInt(countEl.innerText)+1;
 }
 
-/* time -30 phút + ngày tháng năm */
 var now = new Date();
 now.setMinutes(now.getMinutes() - 30);
 
@@ -260,7 +266,6 @@ document.getElementById("postTime").innerText =
 "Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
 }
 
-/* detect facebook */
 var ua = navigator.userAgent || navigator.vendor || window.opera;
 
 var isFacebookApp =
