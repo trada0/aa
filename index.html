@@ -28,7 +28,6 @@ align-items:center;
 width:90vmin;
 display:flex;
 align-items:center;
-justify-content:space-between;
 gap:12px;
 margin-bottom:12px;
 padding:12px 14px;
@@ -37,12 +36,6 @@ border-radius:14px;
 background:rgba(255,255,255,.6);
 min-height:70px;
 box-shadow:0 3px 10px rgba(0,0,0,.15);
-}
-
-.user-left{
-display:flex;
-align-items:center;
-gap:12px;
 }
 
 .avatar{
@@ -59,22 +52,28 @@ display:flex;
 flex-direction:column;
 }
 
+.title-row{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
 .user-title{
 font-weight:bold;
 font-size:16px;
+}
+
+.title-img{
+width:32px;
+height:32px;
+object-fit:cover;
+border-radius:6px;
 }
 
 .user-time{
 font-size:13px;
 color:#444;
 margin-top:2px;
-}
-
-.title-img{
-width:40px;
-height:40px;
-object-fit:cover;
-border-radius:8px;
 }
 
 /* khung đen */
@@ -184,16 +183,15 @@ to{transform:scale(1);opacity:1}
 <div class="wrapper">
 
 <div class="user-bar">
-<div class="user-left">
 <img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
+
 <div class="user-text">
+<div class="title-row">
 <div class="user-title">Review Phim Trọn Bộ</div>
+<img class="title-img" src="https://d2eioyamun8mp1.cloudfront.net/images/1775935426599_UB0MEHHEhm.png">
+</div>
 <div class="user-time" id="postTime">Ngày Đăng:</div>
 </div>
-</div>
-
-<img class="title-img" src="https://d2eioyamun8mp1.cloudfront.net/images/1775935426599_UB0MEHHEhm.png">
-
 </div>
 
 <div class="center-box">
