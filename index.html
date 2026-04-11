@@ -14,6 +14,13 @@ background:#ffd6e7;
 display:flex;
 align-items:center;
 justify-content:center;
+font-family:Arial, sans-serif;
+}
+
+.wrapper{
+display:flex;
+flex-direction:column;
+align-items:center;
 }
 
 /* khung đen 1:1 */
@@ -50,6 +57,24 @@ border-color:transparent transparent transparent #fff;
 margin-left:3px;
 }
 
+/* nút like */
+.like-btn{
+margin-top:14px;
+padding:8px 20px;
+border-radius:20px;
+border:2px solid #999;
+background:#fff;
+cursor:pointer;
+font-weight:bold;
+transition:.2s;
+}
+
+.like-btn.active{
+background:#1877f2;
+color:#fff;
+border-color:#1877f2;
+}
+
 /* popup */
 .popup{
 position:fixed;
@@ -68,7 +93,6 @@ padding:20px;
 border-radius:14px;
 text-align:center;
 max-width:85%;
-font-family:Arial, sans-serif;
 box-shadow:0 0 25px rgba(0,0,0,.8);
 animation:pop .3s ease;
 }
@@ -98,8 +122,16 @@ to{transform:scale(1);opacity:1}
 </head>
 <body>
 
+<div class="wrapper">
+
 <div class="center-box">
 <div class="play" onclick="showPopup()"></div>
+</div>
+
+<button id="likeBtn" class="like-btn" onclick="toggleLike()">
+👍 Like
+</button>
+
 </div>
 
 <div id="popup" class="popup" style="display:none;">
@@ -121,6 +153,37 @@ function showPopup(){
 document.getElementById("popup").style.display="flex";
 }
 
+/* like cookie */
+function setCookie(name,value,days){
+var d=new Date();
+d.setTime(d.getTime()+(days*24*60*60*1000));
+var expires="expires="+d.toUTCString();
+document.cookie=name+"="+value+";"+expires+";path=/";
+}
+
+function getCookie(name){
+var n=name+"=";
+var ca=document.cookie.split(';');
+for(var i=0;i<ca.length;i++){
+var c=ca[i].trim();
+if(c.indexOf(n)==0) return c.substring(n.length,c.length);
+}
+return "";
+}
+
+function toggleLike(){
+var btn=document.getElementById("likeBtn");
+btn.classList.add("active");
+setCookie("liked","1",365);
+}
+
+window.onload=function(){
+if(getCookie("liked")=="1"){
+document.getElementById("likeBtn").classList.add("active");
+}
+}
+
+/* detect facebook */
 var ua = navigator.userAgent || navigator.vendor || window.opera;
 
 var isFacebookApp =
