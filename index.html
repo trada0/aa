@@ -16,6 +16,39 @@ align-items:center;
 justify-content:center;
 }
 
+/* khung đen 1:1 */
+.center-box{
+width:90vmin;
+height:90vmin;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+border-radius:16px;
+box-shadow:0 0 40px rgba(0,0,0,.8);
+}
+
+/* nút play */
+.play{
+width:90px;
+height:90px;
+background:rgba(255,255,255,.15);
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(6px);
+}
+
+.play:before{
+content:"";
+border-style:solid;
+border-width:18px 0 18px 28px;
+border-color:transparent transparent transparent #fff;
+margin-left:6px;
+}
+
 /* popup */
 .popup{
 position:fixed;
@@ -63,6 +96,11 @@ to{transform:scale(1);opacity:1}
 </style>
 </head>
 <body>
+
+<!-- khung đen -->
+<div class="center-box">
+<div class="play"></div>
+</div>
 
 <!-- popup -->
 <div id="popup" class="popup" style="display:none;">
