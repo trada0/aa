@@ -152,12 +152,31 @@ text-align:center;
 max-width:85%;
 box-shadow:0 0 25px rgba(0,0,0,.8);
 animation:pop .3s ease;
+position:relative;
 }
 
 .popup-box img{
 width:100%;
 margin-top:12px;
 border-radius:10px;
+}
+
+/* nút X đỏ */
+.close-popup{
+position:absolute;
+top:-10px;
+right:-10px;
+width:32px;
+height:32px;
+border-radius:50%;
+background:red;
+color:#000;
+font-weight:bold;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 2px 8px rgba(0,0,0,.6);
 }
 
 /* popup profile */
@@ -241,8 +260,12 @@ to{transform:scale(1);opacity:1}
 <!-- popup profile -->
 <div id="profilePopup" class="popup" style="display:none;">
   <div class="popup-box profile-popup">
+    
+    <div class="close-popup" onclick="closeProfile()">✖</div>
+
     <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
     <div class="name">Review Phim Trọn Bộ</div>
+
     <button class="ok-btn" onclick="closeProfile()">OK</button>
   </div>
 </div>
