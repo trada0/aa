@@ -37,24 +37,6 @@ background:rgba(255,255,255,.6);
 min-height:70px;
 box-shadow:0 3px 10px rgba(0,0,0,.15);
 cursor:pointer;
-position:relative;
-}
-
-.close-user{
-position:absolute;
-top:6px;
-right:6px;
-width:26px;
-height:26px;
-border-radius:50%;
-background:red;
-color:#000;
-font-weight:bold;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-box-shadow:0 2px 6px rgba(0,0,0,.4);
 }
 
 .avatar{
@@ -216,9 +198,7 @@ to{transform:scale(1);opacity:1}
 
 <div class="wrapper">
 
-<div id="userBar" class="user-bar" onclick="showProfilePopup()">
-<div class="close-user" onclick="hideUser(event)">✖</div>
-
+<div class="user-bar" onclick="showProfilePopup()">
 <img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
 
 <div class="user-text">
@@ -268,11 +248,6 @@ to{transform:scale(1);opacity:1}
 </div>
 
 <script>
-function hideUser(e){
-e.stopPropagation();
-document.getElementById("userBar").style.display="none";
-}
-
 function showPopup(){
 document.getElementById("popup").style.display="flex";
 }
