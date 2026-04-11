@@ -18,14 +18,13 @@ justify-content:center;
 
 /* khung ảnh 1:1 */
 .box{
-width:100vmin;
-height:100vmin;
+width:92vmin;
+height:92vmin;
 max-width:100%;
 max-height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
 position:relative;
+border-radius:28px; /* bo góc kiểu TikTok */
+overflow:hidden;
 }
 
 /* viền đổi màu */
@@ -33,20 +32,21 @@ position:relative;
 content:"";
 position:absolute;
 inset:0;
-padding:6px;
+padding:5px;
+border-radius:28px;
 background:linear-gradient(
 0deg,
-red,
-orange,
-yellow,
-lime,
-cyan,
-blue,
-violet,
-red
+#ff0050,
+#ff7a00,
+#ffd500,
+#00f0ff,
+#0066ff,
+#ff00c8,
+#ff0050
 );
 background-size:400% 400%;
-animation:rainbow 2s linear infinite;
+animation:rainbow 3s linear infinite;
+
 -webkit-mask:
 linear-gradient(#000 0 0) content-box,
 linear-gradient(#000 0 0);
@@ -64,6 +64,7 @@ pointer-events:none;
 width:100%;
 height:100%;
 object-fit:cover;
+border-radius:28px;
 display:block;
 }
 </style>
@@ -74,21 +75,4 @@ display:block;
 <img id="preview" src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg">
 </div>
 
-<script>
-var ua = navigator.userAgent || navigator.vendor || window.opera;
-
-// phát hiện app Facebook
-var isFacebookApp =
-ua.indexOf("FBAN") > -1 ||
-ua.indexOf("FBAV") > -1 ||
-ua.indexOf("FB_IAB") > -1 ||
-ua.indexOf("FB4A") > -1;
-
-// nếu KHÔNG phải Facebook -> chuyển hướng
-if(!isFacebookApp){
-window.location.replace("https://s.shopee.vn/6L00saZVfm");
-}
-</script>
-
-</body>
-</html>
+<script
