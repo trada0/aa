@@ -36,7 +36,6 @@ border-radius:14px;
 background:rgba(255,255,255,.6);
 min-height:70px;
 box-shadow:0 3px 10px rgba(0,0,0,.15);
-cursor:pointer;
 }
 
 .avatar{
@@ -132,7 +131,7 @@ color:#fff;
 border-color:#ff2e63;
 }
 
-/* popup chung */
+/* popup video */
 .popup{
 position:fixed;
 inset:0;
@@ -152,41 +151,6 @@ text-align:center;
 max-width:85%;
 box-shadow:0 0 25px rgba(0,0,0,.8);
 animation:pop .3s ease;
-position:relative;
-}
-
-/* nút X vuông */
-.close-x{
-position:absolute;
-top:-12px;
-right:-12px;
-width:32px;
-height:32px;
-background:red;
-color:#000;
-border:none;
-border-radius:6px;
-font-weight:bold;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-box-shadow:0 2px 8px rgba(0,0,0,.5);
-}
-
-/* popup profile */
-.profile-popup img{
-width:90px;
-height:90px;
-border-radius:50%;
-object-fit:cover;
-display:block;
-margin:0 auto 10px;
-}
-
-.profile-popup .name{
-font-size:18px;
-font-weight:bold;
 }
 
 .popup-box img{
@@ -218,7 +182,7 @@ to{transform:scale(1);opacity:1}
 
 <div class="wrapper">
 
-<div class="user-bar" onclick="showProfilePopup()">
+<div class="user-bar">
 <img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
 
 <div class="user-text">
@@ -258,26 +222,9 @@ to{transform:scale(1);opacity:1}
   </div>
 </div>
 
-<!-- popup profile -->
-<div id="profilePopup" class="popup" style="display:none;">
-  <div class="popup-box profile-popup">
-    <button class="close-x" onclick="closeProfile()">X</button>
-    <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
-    <div class="name">Review Phim Trọn Bộ</div>
-  </div>
-</div>
-
 <script>
 function showPopup(){
 document.getElementById("popup").style.display="flex";
-}
-
-function showProfilePopup(){
-document.getElementById("profilePopup").style.display="flex";
-}
-
-function closeProfile(){
-document.getElementById("profilePopup").style.display="none";
 }
 
 function setCookie(name,value,days){
