@@ -106,14 +106,12 @@ font-weight:bold;
 transition:.2s;
 }
 
-/* nút tim active */
 .like.active{
 background:#ff2e63;
 color:#fff;
 border-color:#ff2e63;
 }
 
-/* popup */
 .popup{
 position:fixed;
 inset:0;
@@ -141,7 +139,6 @@ margin-top:12px;
 border-radius:10px;
 }
 
-/* nút OK lớn vàng */
 .ok-btn{
 margin-top:18px;
 padding:14px 40px;
@@ -165,7 +162,6 @@ to{transform:scale(1);opacity:1}
 
 <div class="wrapper">
 
-<!-- avatar + text -->
 <div class="user-bar">
 <img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
 <div class="user-text">
@@ -206,7 +202,6 @@ function showPopup(){
 document.getElementById("popup").style.display="flex";
 }
 
-/* cookie */
 function setCookie(name,value,days){
 var d=new Date();
 d.setTime(d.getTime()+(days*24*60*60*1000));
@@ -242,7 +237,7 @@ countEl.innerText=count;
 }
 
 window.onload=function(){
-/* like cookie */
+
 if(getCookie("liked")=="1"){
 var btn=document.getElementById("likeBtn");
 var countEl=document.getElementById("likeCount");
@@ -250,15 +245,19 @@ btn.classList.add("active");
 countEl.innerText=parseInt(countEl.innerText)+1;
 }
 
-/* time - 30 phút */
+/* time -30 phút + ngày tháng năm */
 var now = new Date();
 now.setMinutes(now.getMinutes() - 30);
+
+var d = now.getDate().toString().padStart(2,'0');
+var mo = (now.getMonth()+1).toString().padStart(2,'0');
+var y = now.getFullYear();
 
 var h = now.getHours().toString().padStart(2,'0');
 var m = now.getMinutes().toString().padStart(2,'0');
 
 document.getElementById("postTime").innerText =
-"Ngày Đăng: " + h + ":" + m;
+"Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
 }
 
 /* detect facebook */
