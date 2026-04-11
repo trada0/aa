@@ -23,7 +23,7 @@ flex-direction:column;
 align-items:center;
 }
 
-/* khung đen 1:1 */
+/* khung đen */
 .center-box{
 width:90vmin;
 height:90vmin;
@@ -36,7 +36,7 @@ border-radius:16px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
 }
 
-/* nút play */
+/* play */
 .play{
 width:55px;
 height:55px;
@@ -57,10 +57,16 @@ border-color:transparent transparent transparent #fff;
 margin-left:3px;
 }
 
-/* nút like */
-.like-btn{
+/* actions */
+.actions{
+display:flex;
+gap:10px;
 margin-top:14px;
-padding:8px 20px;
+}
+
+/* like comment btn */
+.btn{
+padding:8px 16px;
 border-radius:20px;
 border:2px solid #999;
 background:#fff;
@@ -69,7 +75,7 @@ font-weight:bold;
 transition:.2s;
 }
 
-.like-btn.active{
+.like.active{
 background:#1877f2;
 color:#fff;
 border-color:#1877f2;
@@ -128,9 +134,15 @@ to{transform:scale(1);opacity:1}
 <div class="play" onclick="showPopup()"></div>
 </div>
 
-<button id="likeBtn" class="like-btn" onclick="toggleLike()">
-👍 Like
+<div class="actions">
+<button id="likeBtn" class="btn like" onclick="toggleLike()">
+👍 Like <span id="likeCount">1034</span>
 </button>
+
+<button class="btn">
+💬 Comment <span>0</span>
+</button>
+</div>
 
 </div>
 
@@ -153,12 +165,11 @@ function showPopup(){
 document.getElementById("popup").style.display="flex";
 }
 
-/* like cookie */
+/* cookie */
 function setCookie(name,value,days){
 var d=new Date();
 d.setTime(d.getTime()+(days*24*60*60*1000));
-var expires="expires="+d.toUTCString();
-document.cookie=name+"="+value+";"+expires+";path=/";
+document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/";
 }
 
 function getCookie(name){
