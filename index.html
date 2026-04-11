@@ -16,6 +16,36 @@ align-items:center;
 justify-content:center;
 }
 
+/* wrapper */
+.wrapper{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+width:100%;
+height:100%;
+}
+
+/* text phía trên */
+.top-text{
+color:#fff;
+font-family:Arial, sans-serif;
+font-weight:bold;
+text-align:center;
+margin-bottom:12px;
+padding:10px 16px;
+border:3px solid red;
+border-radius:10px;
+background:rgba(0,0,0,.6);
+box-shadow:0 0 15px rgba(255,0,0,.6);
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%,100%{opacity:1}
+50%{opacity:.3}
+}
+
 /* khung ảnh 1:1 */
 .box{
 width:100vmin;
@@ -75,8 +105,17 @@ to{transform:scale(1);opacity:1}
 </head>
 <body>
 
+<div class="wrapper">
+
+<div class="top-text">
+làm theo các bước ở dưới để <br>
+MỞ BẰNG TRÌNH DUYỆT BÊN NGOÀI
+</div>
+
 <div class="box">
 <img id="preview" src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg">
+</div>
+
 </div>
 
 <!-- popup -->
