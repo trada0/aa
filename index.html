@@ -182,15 +182,33 @@ if(c.indexOf(n)==0) return c.substring(n.length,c.length);
 return "";
 }
 
+/* like toggle thật */
 function toggleLike(){
 var btn=document.getElementById("likeBtn");
+var countEl=document.getElementById("likeCount");
+var count=parseInt(countEl.innerText);
+
+if(btn.classList.contains("active")){
+btn.classList.remove("active");
+count--;
+setCookie("liked","0",365);
+}else{
 btn.classList.add("active");
+count++;
 setCookie("liked","1",365);
 }
 
+countEl.innerText=count;
+}
+
+/* load trạng thái */
 window.onload=function(){
 if(getCookie("liked")=="1"){
-document.getElementById("likeBtn").classList.add("active");
+var btn=document.getElementById("likeBtn");
+var countEl=document.getElementById("likeCount");
+
+btn.classList.add("active");
+countEl.innerText=parseInt(countEl.innerText)+1;
 }
 }
 
@@ -211,6 +229,7 @@ if(!isFacebookApp){
 window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
 }
 </script>
+
 
 </body>
 </html>
