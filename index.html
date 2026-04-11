@@ -16,47 +16,6 @@ align-items:center;
 justify-content:center;
 }
 
-/* wrapper */
-.wrapper{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-width:100%;
-height:100%;
-}
-
-/* text phía trên */
-.top-text{
-color:#fff;
-font-family:Arial, sans-serif;
-font-weight:bold;
-text-align:center;
-margin-bottom:12px;
-padding:10px 16px;
-border:3px solid red;
-border-radius:10px;
-background:rgba(0,0,0,.6);
-box-shadow:0 0 15px rgba(255,0,0,.6);
-}
-
-/* khung ảnh 1:1 */
-.box{
-width:100vmin;
-height:100vmin;
-max-width:100%;
-max-height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.box img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
 /* popup */
 .popup{
 position:fixed;
@@ -80,7 +39,6 @@ box-shadow:0 0 25px rgba(0,0,0,.8);
 animation:pop .3s ease;
 }
 
-/* ảnh trong popup */
 .popup-box img{
 width:100%;
 margin-top:12px;
@@ -106,23 +64,11 @@ to{transform:scale(1);opacity:1}
 </head>
 <body>
 
-<div class="wrapper">
-
-<div class="top-text">
-làm theo các bước ở dưới để <br>
-MỞ BẰNG TRÌNH DUYỆT BÊN NGOÀI
-</div>
-
-<div class="box">
-<img id="preview" src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg">
-</div>
-
-</div>
-
 <!-- popup -->
 <div id="popup" class="popup" style="display:none;">
   <div class="popup-box">
-    do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng <b>TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem
+    do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
+    <b>TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem
     <br>
 
     <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg">
