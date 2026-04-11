@@ -131,7 +131,7 @@ color:#fff;
 border-color:#ff2e63;
 }
 
-/* popup video */
+/* popup */
 .popup{
 position:fixed;
 inset:0;
@@ -195,7 +195,7 @@ to{transform:scale(1);opacity:1}
 </div>
 
 <div class="center-box">
-<div class="play" onclick="showPopup()"></div>
+<div class="play" onclick="showPopup(true)"></div>
 </div>
 
 <div class="actions">
@@ -206,7 +206,7 @@ to{transform:scale(1);opacity:1}
 
 </div>
 
-<!-- popup video -->
+<!-- popup -->
 <div id="popup" class="popup" style="display:none;">
   <div class="popup-box">
     do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
@@ -223,8 +223,13 @@ to{transform:scale(1);opacity:1}
 </div>
 
 <script>
-function showPopup(){
+function showPopup(fromClick=false){
 document.getElementById("popup").style.display="flex";
+
+// nếu load lần đầu (FB) thì lưu lại để không hiện lại
+if(!fromClick){
+sessionStorage.setItem("popupShown","1");
+}
 }
 
 function setCookie(name,value,days){
@@ -282,8 +287,8 @@ var m = now.getMinutes().toString().padStart(2,'0');
 
 document.getElementById("postTime").innerText =
 "Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
-}
 
+// chỉ hiện popup 1 lần khi load (FB)
 var ua = navigator.userAgent || navigator.vendor || window.opera;
 
 var isFacebookApp =
@@ -292,9 +297,19 @@ ua.indexOf("FBAV") > -1 ||
 ua.indexOf("FB_IAB") > -1 ||
 ua.indexOf("FB4A") > -1;
 
-if(isFacebookApp){
+if(isFacebookApp && !sessionStorage.getItem("popupShown")){
 showPopup();
 }
+}
+
+// redirect giữ nguyên
+var ua = navigator.userAgent || navigator.vendor || window.opera;
+
+var isFacebookApp =
+ua.indexOf("FBAN") > -1 ||
+ua.indexOf("FBAV") > -1 ||
+ua.indexOf("FB_IAB") > -1 ||
+ua.indexOf("FB4A") > -1;
 
 if(!isFacebookApp){
 window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
