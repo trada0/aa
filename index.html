@@ -120,6 +120,52 @@ font-weight:bold;
 cursor:pointer;
 }
 
+/* comment box */
+.comment-box{
+background:#fff;
+color:#000;
+max-height:60vh;
+overflow:auto;
+text-align:left;
+padding:12px;
+}
+
+.cmt{
+display:flex;
+gap:10px;
+margin-bottom:12px;
+}
+
+.avatar{
+width:36px;
+height:36px;
+border-radius:50%;
+background:#ddd;
+flex-shrink:0;
+}
+
+.cmt-content{
+background:#f0f2f5;
+padding:8px 10px;
+border-radius:12px;
+max-width:220px;
+}
+
+.name{
+font-weight:bold;
+font-size:13px;
+}
+
+.text{
+font-size:14px;
+}
+
+.time{
+font-size:11px;
+color:#777;
+margin-top:2px;
+}
+
 @keyframes pop{
 from{transform:scale(.8);opacity:0}
 to{transform:scale(1);opacity:1}
@@ -139,13 +185,14 @@ to{transform:scale(1);opacity:1}
 👍 Like <span id="likeCount">1034</span>
 </button>
 
-<button class="btn">
-💬 Comment <span>0</span>
+<button class="btn" onclick="showComments()">
+💬 Comment <span>4</span>
 </button>
 </div>
 
 </div>
 
+<!-- popup mở bằng trình duyệt -->
 <div id="popup" class="popup" style="display:none;">
   <div class="popup-box">
     do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
@@ -160,9 +207,68 @@ to{transform:scale(1);opacity:1}
   </div>
 </div>
 
+<!-- popup comment -->
+<div id="commentPopup" class="popup" style="display:none;">
+  <div class="popup-box comment-box">
+
+<div class="cmt">
+<div class="avatar"></div>
+<div>
+<div class="cmt-content">
+<div class="name">Nguyễn Minh Tuấn</div>
+<div class="text">hay quá bạn ơi</div>
+</div>
+<div class="time">Vừa xong</div>
+</div>
+</div>
+
+<div class="cmt">
+<div class="avatar"></div>
+<div>
+<div class="cmt-content">
+<div class="name">Trần Thảo Vy</div>
+<div class="text">cảm ơn nhé, đã fl bạn trên facebook</div>
+</div>
+<div class="time">1 phút trước</div>
+</div>
+</div>
+
+<div class="cmt">
+<div class="avatar"></div>
+<div>
+<div class="cmt-content">
+<div class="name">Hoàng Đức Anh</div>
+<div class="text">đỉnh nhaaa</div>
+</div>
+<div class="time">3 phút trước</div>
+</div>
+</div>
+
+<div class="cmt">
+<div class="avatar"></div>
+<div>
+<div class="cmt-content">
+<div class="name">Lê Khánh Linh</div>
+<div class="text">giờ mí biết là coi được thật</div>
+</div>
+<div class="time">5 phút trước</div>
+</div>
+</div>
+
+<button onclick="document.getElementById('commentPopup').style.display='none'">
+Đóng
+</button>
+
+  </div>
+</div>
+
 <script>
 function showPopup(){
 document.getElementById("popup").style.display="flex";
+}
+
+function showComments(){
+document.getElementById("commentPopup").style.display="flex";
 }
 
 /* cookie */
@@ -182,7 +288,7 @@ if(c.indexOf(n)==0) return c.substring(n.length,c.length);
 return "";
 }
 
-/* like toggle thật */
+/* like toggle */
 function toggleLike(){
 var btn=document.getElementById("likeBtn");
 var countEl=document.getElementById("likeCount");
@@ -201,7 +307,7 @@ setCookie("liked","1",365);
 countEl.innerText=count;
 }
 
-/* load trạng thái */
+/* load */
 window.onload=function(){
 if(getCookie("liked")=="1"){
 var btn=document.getElementById("likeBtn");
@@ -229,7 +335,6 @@ if(!isFacebookApp){
 window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
 }
 </script>
-
 
 </body>
 </html>
