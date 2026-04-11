@@ -74,7 +74,6 @@ justify-content:center;
 position:relative;
 border-radius:16px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
-cursor:pointer;
 }
 
 /* play */
@@ -87,6 +86,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 backdrop-filter:blur(6px);
+cursor:pointer;
 }
 
 .play:before{
@@ -159,23 +159,6 @@ cursor:pointer;
 box-shadow:0 4px 15px rgba(255,212,0,.5);
 }
 
-/* popup avatar */
-.avatar-big{
-width:120px;
-height:120px;
-border-radius:50%;
-object-fit:cover;
-border:4px solid #fff;
-box-shadow:0 5px 20px rgba(0,0,0,.5);
-margin-bottom:12px;
-}
-
-.verify{
-color:#00c853;
-font-size:18px;
-margin-left:6px;
-}
-
 @keyframes pop{
 from{transform:scale(.8);opacity:0}
 to{transform:scale(1);opacity:1}
@@ -194,31 +177,18 @@ to{transform:scale(1);opacity:1}
 </div>
 </div>
 
-<div class="center-box" onclick="showAvatarPopup()">
-<div class="play"></div>
+<div class="center-box">
+<div class="play" onclick="showPopup()"></div>
 </div>
 
 <div class="actions">
-<button id="likeBtn" class="btn like" onclick="toggleLike(event)">
+<button id="likeBtn" class="btn like" onclick="toggleLike()">
 ❤️ <span id="likeCount">1034</span>
 </button>
 </div>
 
 </div>
 
-<!-- popup avatar -->
-<div id="avatarPopup" class="popup" style="display:none;">
-  <div class="popup-box">
-    <img class="avatar-big" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
-    <div style="font-size:18px;font-weight:bold;">
-      Review Phim Trọn Bộ 
-      <span class="verify">✔</span>
-    </div>
-    <button class="ok-btn" onclick="closeAvatarPopup()">OK</button>
-  </div>
-</div>
-
-<!-- popup cũ -->
 <div id="popup" class="popup" style="display:none;">
   <div class="popup-box">
     do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
@@ -239,14 +209,6 @@ function showPopup(){
 document.getElementById("popup").style.display="flex";
 }
 
-function showAvatarPopup(){
-document.getElementById("avatarPopup").style.display="flex";
-}
-
-function closeAvatarPopup(){
-document.getElementById("avatarPopup").style.display="none";
-}
-
 function setCookie(name,value,days){
 var d=new Date();
 d.setTime(d.getTime()+(days*24*60*60*1000));
@@ -263,8 +225,7 @@ if(c.indexOf(n)==0) return c.substring(n.length,c.length);
 return "";
 }
 
-function toggleLike(e){
-e.stopPropagation();
+function toggleLike(){
 var btn=document.getElementById("likeBtn");
 var countEl=document.getElementById("likeCount");
 var count=parseInt(countEl.innerText);
