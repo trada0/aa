@@ -155,28 +155,23 @@ animation:pop .3s ease;
 position:relative;
 }
 
-.popup-box img{
-width:100%;
-margin-top:12px;
-border-radius:10px;
-}
-
-/* nút X đỏ */
-.close-popup{
+/* nút X vuông */
+.close-x{
 position:absolute;
-top:-10px;
-right:-10px;
+top:-12px;
+right:-12px;
 width:32px;
 height:32px;
-border-radius:50%;
 background:red;
 color:#000;
+border:none;
+border-radius:6px;
 font-weight:bold;
+cursor:pointer;
 display:flex;
 align-items:center;
 justify-content:center;
-cursor:pointer;
-box-shadow:0 2px 8px rgba(0,0,0,.6);
+box-shadow:0 2px 8px rgba(0,0,0,.5);
 }
 
 /* popup profile */
@@ -192,6 +187,12 @@ margin:0 auto 10px;
 .profile-popup .name{
 font-size:18px;
 font-weight:bold;
+}
+
+.popup-box img{
+width:100%;
+margin-top:12px;
+border-radius:10px;
 }
 
 .ok-btn{
@@ -260,13 +261,9 @@ to{transform:scale(1);opacity:1}
 <!-- popup profile -->
 <div id="profilePopup" class="popup" style="display:none;">
   <div class="popup-box profile-popup">
-    
-    <div class="close-popup" onclick="closeProfile()">✖</div>
-
+    <button class="close-x" onclick="closeProfile()">X</button>
     <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
     <div class="name">Review Phim Trọn Bộ</div>
-
-    <button class="ok-btn" onclick="closeProfile()">OK</button>
   </div>
 </div>
 
