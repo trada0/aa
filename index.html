@@ -28,20 +28,36 @@ justify-content:center;
 position:relative;
 }
 
-/* viền nhấp nháy */
+/* viền đổi màu */
 .box::before{
 content:"";
 position:absolute;
 inset:0;
-border:6px solid red;
-animation:blink 0.8s infinite;
+padding:6px;
+background:linear-gradient(
+0deg,
+red,
+orange,
+yellow,
+lime,
+cyan,
+blue,
+violet,
+red
+);
+background-size:400% 400%;
+animation:rainbow 2s linear infinite;
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+-webkit-mask-composite: xor;
+mask-composite: exclude;
 pointer-events:none;
 }
 
-@keyframes blink{
-0%{opacity:1;}
-50%{opacity:0.2;}
-100%{opacity:1;}
+@keyframes rainbow{
+0%{background-position:0% 50%;}
+100%{background-position:400% 50%;}
 }
 
 .box img{
