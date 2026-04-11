@@ -36,6 +36,7 @@ border-radius:14px;
 background:rgba(255,255,255,.6);
 min-height:70px;
 box-shadow:0 3px 10px rgba(0,0,0,.15);
+cursor:pointer;
 }
 
 .avatar{
@@ -109,12 +110,15 @@ border-color:transparent transparent transparent #fff;
 margin-left:3px;
 }
 
+/* actions */
 .actions{
 display:flex;
-gap:10px;
+justify-content:flex-start;
+width:90vmin;
 margin-top:14px;
 }
 
+/* btn */
 .btn{
 padding:8px 16px;
 border-radius:20px;
@@ -182,7 +186,8 @@ to{transform:scale(1);opacity:1}
 
 <div class="wrapper">
 
-<div class="user-bar">
+<!-- CLICK chuyển link -->
+<div class="user-bar" onclick="goProfile()">
 <img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
 
 <div class="user-text">
@@ -223,10 +228,12 @@ to{transform:scale(1);opacity:1}
 </div>
 
 <script>
+function goProfile(){
+window.open("https://www.facebook.com/profile.php?id=61563087217509","_blank");
+}
+
 function showPopup(fromClick=false){
 document.getElementById("popup").style.display="flex";
-
-// nếu load lần đầu (FB) thì lưu lại để không hiện lại
 if(!fromClick){
 sessionStorage.setItem("popupShown","1");
 }
@@ -288,7 +295,6 @@ var m = now.getMinutes().toString().padStart(2,'0');
 document.getElementById("postTime").innerText =
 "Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
 
-// chỉ hiện popup 1 lần khi load (FB)
 var ua = navigator.userAgent || navigator.vendor || window.opera;
 
 var isFacebookApp =
@@ -302,7 +308,6 @@ showPopup();
 }
 }
 
-// redirect giữ nguyên
 var ua = navigator.userAgent || navigator.vendor || window.opera;
 
 var isFacebookApp =
