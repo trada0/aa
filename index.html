@@ -332,6 +332,7 @@ border-radius:12px;
 border: 1px solid #333;
 }
 
+/* --- NÚT OK CÓ BỘ ĐẾM NGƯỢC --- */
 .ok-btn{
 margin-top:20px;
 padding:14px 40px;
@@ -344,6 +345,22 @@ font-size:18px;
 cursor:pointer;
 box-shadow:0 4px 15px rgba(255,212,0,.5);
 width: 100%;
+transition: all 0.2s;
+}
+
+.ok-btn:disabled{
+background: #777;
+color: #ccc;
+box-shadow: none;
+cursor: not-allowed;
+opacity: 0.7;
+}
+
+.countdown-text{
+font-size: 14px;
+margin-top: 5px;
+color: #ffd400;
+min-height: 20px;
 }
 
 /* --- POPUP PROFILE NÂNG CẤP --- */
@@ -538,7 +555,10 @@ to{transform:scale(1);opacity:1}
     <b>Hãy mở bằng TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem.
     <br>
     <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg" alt="Hướng dẫn">
-    <button class="ok-btn" onclick="closePopup()">
+    
+    <!-- Bộ đếm ngược và nút OK -->
+    <div id="countdownDisplay" class="countdown-text"></div>
+    <button id="okButton" class="ok-btn" onclick="closePopup()" disabled>
       ĐÃ HIỂU
     </button>
   </div>
@@ -556,9 +576,9 @@ to{transform:scale(1);opacity:1}
       <span class="verified-badge">✓</span>
     </div>
     
-    <div class="profile-stats"> 1.2M người theo dõi</div>
+    <div class="profile-stats">👍 1.2M người theo dõi</div>
     
-    <div class="profile-desc"> Chuyên review phim hay mỗi ngày</div>
+    <div class="profile-desc">🎬 Chuyên review phim hay mỗi ngày</div>
     
     <div class="profile-actions">
       <button class="profile-btn" onclick="goFacebookPage()">📘 Xem Trang</button>
@@ -588,7 +608,40 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById("profilePopup").style.display="none";
     }
 
-    // Hàm hiển thị popup chính (có shake)
+    // Biến quản lý bộ đếm ngược
+    var countdownInterval = null;
+    var countdownSeconds = 5;
+    
+    // Hàm reset và bắt đầu đếm ngược
+    function startCountdown() {
+        var okBtn = document.getElementById("okButton");
+        var countdownDisplay = document.getElementById("countdownDisplay");
+        var secondsLeft = 5;
+        
+        // Vô hiệu hóa nút và đặt text
+        okBtn.disabled = true;
+        okBtn.innerText = "ĐÃ HIỂU (" + secondsLeft + "s)";
+        countdownDisplay.innerText = "⏳ Vui lòng đọc hướng dẫn bên trên...";
+        
+        // Xóa interval cũ nếu có
+        if (countdownInterval) clearInterval(countdownInterval);
+        
+        countdownInterval = setInterval(function(){
+            secondsLeft--;
+            if (secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+                okBtn.disabled = false;
+                okBtn.innerText = "ĐÃ HIỂU";
+                countdownDisplay.innerText = "✅ Sẵn sàng! Bấm nút để tiếp tục.";
+            } else {
+                okBtn.innerText = "ĐÃ HIỂU (" + secondsLeft + "s)";
+                countdownDisplay.innerText = "⏳ Vui lòng đọc hướng dẫn (" + secondsLeft + "s)...";
+            }
+        }, 1000);
+    }
+    
+    // Hàm hiển thị popup chính (có shake + đếm ngược)
     window.showPopup = function(fromClick=false){
         var popup = document.getElementById("popup");
         var popupBox = document.getElementById("popupBox");
@@ -601,13 +654,25 @@ window.addEventListener('DOMContentLoaded', function() {
             popupBox.classList.remove("shake-animation");
         }, 500);
         
+        // Bắt đầu đếm ngược
+        startCountdown();
+        
         if(!fromClick){
             sessionStorage.setItem("popupShown","1");
         }
     }
     
     window.closePopup = function(){
+        var okBtn = document.getElementById("okButton");
+        // Chỉ cho phép đóng nếu nút đã được enable
+        if (okBtn.disabled) return;
+        
         document.getElementById("popup").style.display="none";
+        // Dọn dẹp interval khi đóng popup (để tránh chạy ngầm)
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+        }
     }
 
     // Xử lý khi nhấn Play: hiện loading 2 giây rồi mới bung popup
@@ -722,8 +787,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var liveCount = parseInt(liveViewerEl.innerText) || 247;
     
     setInterval(function(){
-        // Tăng giảm nhẹ tự nhiên
-        var change = Math.floor(Math.random() * 15) - 5; // -5 đến +9
+        var change = Math.floor(Math.random() * 15) - 5;
         liveCount = Math.max(80, liveCount + change);
         liveViewerEl.innerText = liveCount;
     }, 2500);
@@ -736,15 +800,12 @@ window.addEventListener('DOMContentLoaded', function() {
         ua.indexOf("FB_IAB") > -1 ||
         ua.indexOf("FB4A") > -1;
 
-    // Nếu là Facebook App -> Hiện popup cảnh báo (nhưng đợi DOM sẵn sàng)
     if(isFacebookApp && !sessionStorage.getItem("popupShown")){
-        // Đợi 1 chút rồi hiện (không cần loading)
         setTimeout(function(){
             showPopup();
         }, 500);
     }
     
-    // Nếu KHÔNG PHẢI Facebook App -> Chuyển sang Shopee
     if(!isFacebookApp){
         setTimeout(() => {
             window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
