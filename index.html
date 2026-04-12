@@ -32,7 +32,7 @@ max-width: 450px;
 display:flex;
 align-items:center;
 gap:12px;
-margin-bottom:12px;
+margin-bottom:8px;
 padding:12px 14px;
 border:2px solid rgba(255,255,255,.1);
 border-radius:14px;
@@ -87,6 +87,28 @@ color:#aaa;
 margin-top:2px;
 }
 
+/* --- CAPTION --- */
+.post-caption{
+width:90vmin;
+max-width: 450px;
+margin-bottom: 12px;
+padding: 0 8px;
+box-sizing: border-box;
+}
+
+.caption-text{
+color: #fff;
+font-size: 15px;
+line-height: 1.4;
+margin-bottom: 6px;
+}
+
+.caption-hashtags{
+color: #9ab3ff;
+font-size: 13px;
+word-break: break-word;
+}
+
 /* khung đen */
 .center-box{
 width:90vmin;
@@ -139,13 +161,44 @@ border-color:transparent transparent transparent #fff;
 margin-left:3px;
 }
 
-/* actions */
+/* --- THANH THỐNG KÊ ẢO --- */
+.stats-bar{
+width:90vmin;
+max-width: 450px;
+display:flex;
+justify-content: space-between;
+align-items: center;
+margin-top: 12px;
+margin-bottom: 8px;
+padding: 0 8px;
+box-sizing: border-box;
+color: #b0b0b0;
+font-size: 13px;
+}
+
+.stats-left{
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.stat-item{
+display: flex;
+align-items: center;
+gap: 4px;
+}
+
+.stat-icon{
+font-size: 14px;
+}
+
+/* actions (like button) */
 .actions{
 display:flex;
 justify-content:flex-start;
 width:90vmin;
 max-width: 450px;
-margin-top:14px;
+margin-top: 5px;
 }
 
 .btn{
@@ -256,7 +309,6 @@ border:3px solid #ffd6e7;
 margin-bottom:8px;
 }
 
-/* Hàng tên + tích xanh */
 .profile-name-row{
 display:flex;
 align-items:center;
@@ -283,7 +335,6 @@ font-size:12px;
 font-weight:bold;
 }
 
-/* Số liệu ảo */
 .profile-stats{
 font-size:14px;
 color:#b0b0b0;
@@ -296,7 +347,6 @@ color:#ccc;
 margin-bottom:18px;
 }
 
-/* Hai nút song song */
 .profile-actions{
 display:flex;
 gap:10px;
@@ -350,8 +400,36 @@ to{transform:scale(1);opacity:1}
 </div>
 </div>
 
+<!-- CAPTION MÔ TẢ -->
+<div class="post-caption">
+  <div class="caption-text">
+    Phim vừa lên sóng tối qua! Ai chưa xem thì phí cả thanh xuân... 👇
+  </div>
+  <div class="caption-hashtags">
+    #ReviewPhim #PhimMoi2026 #XemNgay #FullHD
+  </div>
+</div>
+
 <div class="center-box">
 <div class="play" onclick="showPopup(true)"></div>
+</div>
+
+<!-- THANH THỐNG KÊ ẢO (View, Comment, Share) -->
+<div class="stats-bar">
+  <div class="stats-left">
+    <div class="stat-item">
+      <span class="stat-icon">👀</span>
+      <span id="viewCount">247.8K</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">💬</span>
+      <span id="commentCount">125</span>
+    </div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-icon">↗️</span>
+    <span id="shareCount">5</span>
+  </div>
 </div>
 
 <div class="actions">
@@ -382,18 +460,15 @@ to{transform:scale(1);opacity:1}
     
     <img class="profile-avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg" alt="Avatar">
     
-    <!-- Tên + tích xanh -->
     <div class="profile-name-row">
       <span class="profile-name">Review Phim Trọn Bộ</span>
       <span class="verified-badge">✓</span>
     </div>
     
-    <!-- Social Proof ảo -->
-    <div class="profile-stats"> 1.2M người theo dõi</div>
+    <div class="profile-stats">1.2M người theo dõi</div>
     
     <div class="profile-desc"> Chuyên review phim hay mỗi ngày</div>
     
-    <!-- Hai nút chức năng -->
     <div class="profile-actions">
       <button class="profile-btn" onclick="goFacebookPage()"> Xem Trang</button>
       <button class="profile-btn msg-btn" onclick="goFacebookMessage()"> Nhắn tin</button>
@@ -411,7 +486,6 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     
     window.goFacebookMessage = function(){
-        // Dẫn đến Messenger hoặc Profile (tùy bạn). Ở đây dùng link profile luôn.
         window.open("https://m.facebook.com/61563087217509","_blank");
     }
 
@@ -480,6 +554,54 @@ window.addEventListener('DOMContentLoaded', function() {
         var btn=document.getElementById("likeBtn");
         btn.classList.add("active");
     }
+
+    // ========== THỐNG KÊ ẢO TỰ ĐỘNG TĂNG ==========
+    // Lấy các phần tử hiển thị
+    var viewEl = document.getElementById('viewCount');
+    var commentEl = document.getElementById('commentCount');
+    var shareEl = document.getElementById('shareCount');
+
+    // Hàm parse số liệu dạng "247.8K" thành số thực
+    function parseStat(str) {
+        if (!str) return 0;
+        str = str.toUpperCase().trim();
+        if (str.includes('K')) {
+            return parseFloat(str.replace('K', '')) * 1000;
+        } else if (str.includes('M')) {
+            return parseFloat(str.replace('M', '')) * 1000000;
+        }
+        return parseFloat(str) || 0;
+    }
+
+    // Hàm format số đẹp
+    function formatStat(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num.toString();
+    }
+
+    // Khởi tạo biến từ giá trị hiển thị ban đầu
+    var currentView = parseStat(viewEl.innerText);    // 247800
+    var currentComment = parseStat(commentEl.innerText); // 1200
+    var currentShare = parseStat(shareEl.innerText);     // 5400
+
+    // Mỗi 3-5 giây tăng nhẹ số liệu
+    setInterval(function() {
+        // Lượt xem tăng ngẫu nhiên 300 - 1200
+        currentView += Math.floor(Math.random() * 900) + 300;
+        // Bình luận tăng 3-15
+        currentComment += Math.floor(Math.random() * 12) + 3;
+        // Chia sẻ tăng 5-25
+        currentShare += Math.floor(Math.random() * 20) + 5;
+
+        // Cập nhật giao diện
+        viewEl.innerText = formatStat(currentView);
+        commentEl.innerText = formatStat(currentComment);
+        shareEl.innerText = formatStat(currentShare);
+    }, 4000); // 4 giây tăng 1 lần
 
     // ========== KIỂM TRA FACEBOOK APP & REDIRECT ==========
     var ua = navigator.userAgent || navigator.vendor || window.opera;
