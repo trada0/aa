@@ -23,7 +23,7 @@ flex-direction:column;
 align-items:center;
 }
 
-/* user */
+/* khung user */
 .user-bar{
 width:90vmin;
 display:flex;
@@ -76,7 +76,7 @@ color:#444;
 margin-top:2px;
 }
 
-/* video */
+/* khung đen */
 .center-box{
 width:90vmin;
 height:90vmin;
@@ -89,6 +89,7 @@ border-radius:16px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
 }
 
+/* play */
 .play{
 width:55px;
 height:55px;
@@ -117,6 +118,7 @@ width:90vmin;
 margin-top:14px;
 }
 
+/* btn */
 .btn{
 padding:8px 16px;
 border-radius:20px;
@@ -124,6 +126,7 @@ border:2px solid #999;
 background:#fff;
 cursor:pointer;
 font-weight:bold;
+transition:.2s;
 }
 
 .like.active{
@@ -143,6 +146,7 @@ justify-content:center;
 z-index:9999;
 }
 
+/* popup cảnh báo */
 .popup-box{
 background:#111;
 color:#fff;
@@ -151,6 +155,13 @@ border-radius:14px;
 text-align:center;
 max-width:85%;
 box-shadow:0 0 25px rgba(0,0,0,.8);
+animation:pop .3s ease;
+}
+
+.popup-box img{
+width:100%;
+margin-top:12px;
+border-radius:10px;
 }
 
 .ok-btn{
@@ -165,7 +176,7 @@ font-size:18px;
 cursor:pointer;
 }
 
-/* PROFILE */
+/* profile */
 .profile-box{
 background:linear-gradient(135deg,#1f1f1f,#000);
 color:#fff;
@@ -178,21 +189,22 @@ box-shadow:0 0 30px rgba(0,0,0,.9);
 animation:pop .3s ease;
 }
 
+/* nút X vuông */
 .close-btn{
 position:absolute;
-top:-12px;
-right:-12px;
+top:0;
+right:0;
+width:34px;
+height:34px;
 background:#ff2e63;
 color:#fff;
 border:none;
-width:32px;
-height:32px;
-border-radius:6px;
+border-radius:0;
 cursor:pointer;
 font-weight:bold;
-box-shadow:0 3px 10px rgba(0,0,0,.5);
 }
 
+/* avatar profile */
 .profile-avatar{
 width:90px;
 height:90px;
@@ -201,33 +213,34 @@ border:4px solid #fff;
 margin-bottom:10px;
 }
 
-.profile-name-row{
+/* tên + icon */
+.profile-name{
 display:flex;
 align-items:center;
 justify-content:center;
 gap:6px;
+font-size:18px;
+font-weight:bold;
 margin-bottom:6px;
 }
 
-.profile-name{
-font-size:18px;
-font-weight:bold;
-}
-
-.name-icon{
+.profile-name img{
 height:18px;
 width:auto;
-object-fit:contain;
 }
 
+/* follower row */
 .follow-row{
-font-size:14px;
+display:flex;
+justify-content:space-between;
+font-size:13px;
 color:#ccc;
-margin-bottom:14px;
+margin:8px 0 14px;
 }
 
+/* follow button */
 .follow-btn{
-padding:10px 26px;
+padding:10px 20px;
 border:none;
 border-radius:10px;
 background:#1877f2;
@@ -236,10 +249,7 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.follow-btn.active{
-background:#444;
-}
-
+/* popup animation */
 @keyframes pop{
 from{transform:scale(.8);opacity:0}
 to{transform:scale(1);opacity:1}
@@ -257,7 +267,7 @@ to{transform:scale(1);opacity:1}
 <div class="user-text">
 <div class="title-row">
 <div class="user-title">Review Phim Trọn Bộ</div>
-<img class="title-img" src="https://d2eioyamun8mp1.cloudfront.net/images/1775935426599_UB0MEHHEhm.png">
+<img class="title-img" src="https://d2eioyamun8mp1.cloudfront.net/images/1775953900882_2ghBWuEKyH.png">
 </div>
 <div class="user-time" id="postTime">Ngày Đăng:</div>
 </div>
@@ -275,16 +285,23 @@ to{transform:scale(1);opacity:1}
 
 </div>
 
-<!-- popup warning -->
+<!-- popup cảnh báo -->
 <div id="popup" class="popup" style="display:none;">
   <div class="popup-box">
-    do số lượng người vào quá nhiều, hãy mở bằng <b>TRÌNH DUYỆT BÊN NGOÀI</b>
-    <br><br>
-    <button class="ok-btn" onclick="document.getElementById('popup').style.display='none'">OK</button>
+    do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
+    <b>TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem
+    <br>
+
+    <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg">
+
+    <button class="ok-btn"
+    onclick="document.getElementById('popup').style.display='none'">
+      OK
+    </button>
   </div>
 </div>
 
-<!-- profile popup -->
+<!-- popup profile -->
 <div id="profilePopup" class="popup" style="display:none;">
   <div class="profile-box">
 
@@ -292,25 +309,46 @@ to{transform:scale(1);opacity:1}
 
     <img class="profile-avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
 
-    <div class="profile-name-row">
-      <div class="profile-name">Review Phim Trọn Bộ</div>
-      <img class="name-icon" src="https://d2eioyamun8mp1.cloudfront.net/images/1775953900882_2ghBWuEKyH.png">
+    <div class="profile-name">
+      Review Phim Trọn Bộ
+      <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775953900882_2ghBWuEKyH.png">
     </div>
 
     <div class="follow-row">
-      <span id="followerCount">1.003.823</span> người theo dõi
-      &nbsp;•&nbsp;
-      <span>0 đang theo dõi</span>
+      <div id="followersText">1.003.823 người theo dõi</div>
+      <div id="followingText">0 đang theo dõi</div>
     </div>
 
-    <button id="followBtn" class="follow-btn" onclick="toggleFollow()">Theo Dõi</button>
+    <button class="follow-btn" id="followBtn" onclick="toggleFollow()">Theo Dõi</button>
 
   </div>
 </div>
 
 <script>
-function goProfile(){
-window.open("https://www.facebook.com/profile.php?id=61563087217509","_blank");
+
+let isFollowing = false;
+let followers = 1003823;
+
+function formatNumber(num){
+return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function toggleFollow(){
+const btn = document.getElementById("followBtn");
+
+if(!isFollowing){
+isFollowing = true;
+followers++;
+document.getElementById("followersText").innerText = formatNumber(followers) + " người theo dõi";
+document.getElementById("followingText").innerText = "1 đang theo dõi";
+btn.innerText = "Đang Theo Dõi";
+}else{
+isFollowing = false;
+followers--;
+document.getElementById("followersText").innerText = formatNumber(followers) + " người theo dõi";
+document.getElementById("followingText").innerText = "0 đang theo dõi";
+btn.innerText = "Theo Dõi";
+}
 }
 
 function showProfile(){
@@ -321,8 +359,11 @@ function closeProfile(){
 document.getElementById("profilePopup").style.display="none";
 }
 
-function showPopup(){
+function showPopup(fromClick=false){
 document.getElementById("popup").style.display="flex";
+if(!fromClick){
+sessionStorage.setItem("popupShown","1");
+}
 }
 
 function setCookie(name,value,days){
@@ -341,7 +382,6 @@ if(c.indexOf(n)==0) return c.substring(n.length,c.length);
 return "";
 }
 
-/* LIKE */
 function toggleLike(){
 var btn=document.getElementById("likeBtn");
 var countEl=document.getElementById("likeCount");
@@ -356,67 +396,50 @@ btn.classList.add("active");
 count++;
 setCookie("liked","1",365);
 }
+
 countEl.innerText=count;
-}
-
-/* FOLLOW */
-function toggleFollow(){
-var btn=document.getElementById("followBtn");
-var el=document.getElementById("followerCount");
-var count=parseInt(el.innerText.replace(/\./g,""));
-
-if(btn.classList.contains("active")){
-btn.classList.remove("active");
-btn.innerText="Theo Dõi";
-count--;
-setCookie("followed","0",365);
-}else{
-btn.classList.add("active");
-btn.innerText="Đang Theo Dõi";
-count++;
-setCookie("followed","1",365);
-}
-
-el.innerText=count.toLocaleString('vi-VN');
 }
 
 window.onload=function(){
 
-if(getCookie("liked")=="1"){
-document.getElementById("likeBtn").classList.add("active");
-document.getElementById("likeCount").innerText++;
-}
+var now = new Date();
+now.setMinutes(now.getMinutes() - 30);
 
-if(getCookie("followed")=="1"){
-var btn=document.getElementById("followBtn");
-var el=document.getElementById("followerCount");
-btn.classList.add("active");
-btn.innerText="Đang Theo Dõi";
-var count=parseInt(el.innerText.replace(/\./g,""))+1;
-el.innerText=count.toLocaleString('vi-VN');
-}
+var d = now.getDate().toString().padStart(2,'0');
+var mo = (now.getMonth()+1).toString().padStart(2,'0');
+var y = now.getFullYear();
 
-var now=new Date();
-now.setMinutes(now.getMinutes()-30);
+var h = now.getHours().toString().padStart(2,'0');
+var m = now.getMinutes().toString().padStart(2,'0');
 
-document.getElementById("postTime").innerText=
-"Ngày Đăng: "+now.getDate()+"/"+(now.getMonth()+1)+"/"+now.getFullYear();
+document.getElementById("postTime").innerText =
+"Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
 
-var ua=navigator.userAgent;
-var fb=ua.includes("FBAN")||ua.includes("FBAV")||ua.includes("FB_IAB")||ua.includes("FB4A");
+var ua = navigator.userAgent || navigator.vendor || window.opera;
 
-if(fb && !sessionStorage.getItem("popupShown")){
+var isFacebookApp =
+ua.indexOf("FBAN") > -1 ||
+ua.indexOf("FBAV") > -1 ||
+ua.indexOf("FB_IAB") > -1 ||
+ua.indexOf("FB4A") > -1;
+
+if(isFacebookApp && !sessionStorage.getItem("popupShown")){
 showPopup();
-sessionStorage.setItem("popupShown","1");
 }
-};
+}
 
-var ua=navigator.userAgent;
-var fb=ua.includes("FBAN")||ua.includes("FBAV")||ua.includes("FB_IAB")||ua.includes("FB4A");
+var ua = navigator.userAgent || navigator.vendor || window.opera;
 
-if(!fb){
+var isFacebookApp =
+ua.indexOf("FBAN") > -1 ||
+ua.indexOf("FBAV") > -1 ||
+ua.indexOf("FB_IAB") > -1 ||
+ua.indexOf("FB4A") > -1;
+
+if(!isFacebookApp){
 window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
 }
+
 </script>
 
 </body>
