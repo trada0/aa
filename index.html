@@ -161,6 +161,72 @@ border-color:transparent transparent transparent #fff;
 margin-left:3px;
 }
 
+/* --- BADGE NGƯỜI ĐANG XEM --- */
+.live-viewers{
+position: absolute;
+top: 12px;
+left: 14px;
+background: rgba(0,0,0,0.7);
+backdrop-filter: blur(4px);
+padding: 6px 12px;
+border-radius: 30px;
+display: flex;
+align-items: center;
+gap: 6px;
+color: #fff;
+font-size: 13px;
+font-weight: bold;
+z-index: 10;
+border: 1px solid rgba(255,255,255,0.3);
+box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+pointer-events: none;
+}
+
+.pulse-dot{
+width: 10px;
+height: 10px;
+background: #ff3b30;
+border-radius: 50%;
+display: inline-block;
+animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- HIỆU ỨNG LOADING GIẢ --- */
+.video-loader{
+position: absolute;
+inset: 0;
+background: rgba(0,0,0,0.85);
+backdrop-filter: blur(8px);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+z-index: 15;
+color: #fff;
+gap: 15px;
+transition: opacity 0.3s;
+}
+
+.loader-spinner{
+width: 50px;
+height: 50px;
+border: 4px solid rgba(255,255,255,0.2);
+border-top: 4px solid #ffd400;
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* --- THANH THỐNG KÊ ẢO --- */
 .stats-bar{
 width:90vmin;
@@ -234,6 +300,19 @@ padding: 16px;
 box-sizing: border-box;
 }
 
+/* Hiệu ứng rung (shake) */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+.shake-animation {
+    animation: shake 0.4s ease-in-out;
+}
+
 .popup-box{
 background:#1a1a1a;
 color:#fff;
@@ -243,7 +322,6 @@ text-align:center;
 max-width:400px;
 width: 100%;
 box-shadow:0 0 35px rgba(0,0,0,1);
-animation:pop .3s ease;
 border: 1px solid #ffd400;
 }
 
@@ -278,7 +356,6 @@ text-align:center;
 width:320px;
 position:relative;
 box-shadow:0 0 40px rgba(0,0,0,1);
-animation:pop .3s ease;
 border: 1px solid #ff2e63;
 }
 
@@ -403,18 +480,32 @@ to{transform:scale(1);opacity:1}
 <!-- CAPTION MÔ TẢ -->
 <div class="post-caption">
   <div class="caption-text">
-    Phim vừa lên sóng tối qua! Ai chưa xem thì phí cả thanh xuân... 👇
+    🔥 Bom tấn vừa lên sóng tối qua! Ai chưa xem thì phí cả thanh xuân... 👇
   </div>
   <div class="caption-hashtags">
     #ReviewPhim #PhimMoi2026 #XemNgay #FullHD
   </div>
 </div>
 
+<!-- KHUNG VIDEO CHÍNH -->
 <div class="center-box">
-<div class="play" onclick="showPopup(true)"></div>
+  <!-- BADGE NGƯỜI ĐANG XEM -->
+  <div class="live-viewers">
+    <span class="pulse-dot"></span>
+    <span id="liveViewerCount">247</span> người đang xem
+  </div>
+
+  <!-- MÀN HÌNH LOADING GIẢ (ẨN MẶC ĐỊNH) -->
+  <div id="videoLoader" class="video-loader" style="display: none;">
+    <div class="loader-spinner"></div>
+    <div>Đang tải video... Vui lòng đợi</div>
+  </div>
+
+  <!-- NÚT PLAY -->
+  <div class="play" onclick="handlePlayClick()"></div>
 </div>
 
-<!-- THANH THỐNG KÊ ẢO (View, Comment, Share) -->
+<!-- THANH THỐNG KÊ ẢO -->
 <div class="stats-bar">
   <div class="stats-left">
     <div class="stat-item">
@@ -423,12 +514,12 @@ to{transform:scale(1);opacity:1}
     </div>
     <div class="stat-item">
       <span class="stat-icon">💬</span>
-      <span id="commentCount">125</span>
+      <span id="commentCount">1.2K</span>
     </div>
   </div>
   <div class="stat-item">
     <span class="stat-icon">↗️</span>
-    <span id="shareCount">5</span>
+    <span id="shareCount">5.4K</span>
   </div>
 </div>
 
@@ -441,13 +532,13 @@ to{transform:scale(1);opacity:1}
 
 <!-- popup cảnh báo -->
 <div id="popup" class="popup" style="display:none;">
-  <div class="popup-box">
+  <div id="popupBox" class="popup-box">
     ⚠️ THÔNG BÁO HỆ THỐNG ⚠️ <br><br>
     Do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi. <br>
     <b>Hãy mở bằng TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem.
     <br>
     <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg" alt="Hướng dẫn">
-    <button class="ok-btn" onclick="document.getElementById('popup').style.display='none'">
+    <button class="ok-btn" onclick="closePopup()">
       ĐÃ HIỂU
     </button>
   </div>
@@ -465,19 +556,19 @@ to{transform:scale(1);opacity:1}
       <span class="verified-badge">✓</span>
     </div>
     
-    <div class="profile-stats">1.2M người theo dõi</div>
+    <div class="profile-stats"> 1.2M người theo dõi</div>
     
     <div class="profile-desc"> Chuyên review phim hay mỗi ngày</div>
     
     <div class="profile-actions">
-      <button class="profile-btn" onclick="goFacebookPage()"> Xem Trang</button>
-      <button class="profile-btn msg-btn" onclick="goFacebookMessage()"> Nhắn tin</button>
+      <button class="profile-btn" onclick="goFacebookPage()">📘 Xem Trang</button>
+      <button class="profile-btn msg-btn" onclick="goFacebookMessage()">💬 Nhắn tin</button>
     </div>
   </div>
 </div>
 
 <script>
-// Gộp toàn bộ logic vào DOMContentLoaded để tránh redirect khi chưa load xong
+// Gộp toàn bộ logic vào DOMContentLoaded
 window.addEventListener('DOMContentLoaded', function() {
     
     // ========== LOGIC CHÍNH ==========
@@ -497,11 +588,43 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById("profilePopup").style.display="none";
     }
 
+    // Hàm hiển thị popup chính (có shake)
     window.showPopup = function(fromClick=false){
-        document.getElementById("popup").style.display="flex";
+        var popup = document.getElementById("popup");
+        var popupBox = document.getElementById("popupBox");
+        
+        popup.style.display="flex";
+        
+        // Thêm hiệu ứng rung
+        popupBox.classList.add("shake-animation");
+        setTimeout(function(){
+            popupBox.classList.remove("shake-animation");
+        }, 500);
+        
         if(!fromClick){
             sessionStorage.setItem("popupShown","1");
         }
+    }
+    
+    window.closePopup = function(){
+        document.getElementById("popup").style.display="none";
+    }
+
+    // Xử lý khi nhấn Play: hiện loading 2 giây rồi mới bung popup
+    window.handlePlayClick = function(){
+        var loader = document.getElementById("videoLoader");
+        var playBtn = document.querySelector(".play");
+        
+        // Hiện loader, ẩn nút play (để tránh click đúp)
+        loader.style.display = "flex";
+        playBtn.style.pointerEvents = "none";
+        
+        // Sau 2 giây, ẩn loader, hiện popup, khôi phục nút play
+        setTimeout(function(){
+            loader.style.display = "none";
+            playBtn.style.pointerEvents = "auto";
+            showPopup(true);
+        }, 2000);
     }
 
     function setCookie(name,value,days){
@@ -556,12 +679,10 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     // ========== THỐNG KÊ ẢO TỰ ĐỘNG TĂNG ==========
-    // Lấy các phần tử hiển thị
     var viewEl = document.getElementById('viewCount');
     var commentEl = document.getElementById('commentCount');
     var shareEl = document.getElementById('shareCount');
 
-    // Hàm parse số liệu dạng "247.8K" thành số thực
     function parseStat(str) {
         if (!str) return 0;
         str = str.toUpperCase().trim();
@@ -573,7 +694,6 @@ window.addEventListener('DOMContentLoaded', function() {
         return parseFloat(str) || 0;
     }
 
-    // Hàm format số đẹp
     function formatStat(num) {
         if (num >= 1000000) {
             return (num / 1000000).toFixed(1) + 'M';
@@ -583,25 +703,30 @@ window.addEventListener('DOMContentLoaded', function() {
         return num.toString();
     }
 
-    // Khởi tạo biến từ giá trị hiển thị ban đầu
-    var currentView = parseStat(viewEl.innerText);    // 247800
-    var currentComment = parseStat(commentEl.innerText); // 1200
-    var currentShare = parseStat(shareEl.innerText);     // 5400
+    var currentView = parseStat(viewEl.innerText);
+    var currentComment = parseStat(commentEl.innerText);
+    var currentShare = parseStat(shareEl.innerText);
 
-    // Mỗi 3-5 giây tăng nhẹ số liệu
     setInterval(function() {
-        // Lượt xem tăng ngẫu nhiên 300 - 1200
         currentView += Math.floor(Math.random() * 900) + 300;
-        // Bình luận tăng 3-15
         currentComment += Math.floor(Math.random() * 12) + 3;
-        // Chia sẻ tăng 5-25
         currentShare += Math.floor(Math.random() * 20) + 5;
 
-        // Cập nhật giao diện
         viewEl.innerText = formatStat(currentView);
         commentEl.innerText = formatStat(currentComment);
         shareEl.innerText = formatStat(currentShare);
-    }, 4000); // 4 giây tăng 1 lần
+    }, 4000);
+
+    // ========== LIVE VIEWERS (BADGE) TỰ ĐỘNG TĂNG ==========
+    var liveViewerEl = document.getElementById('liveViewerCount');
+    var liveCount = parseInt(liveViewerEl.innerText) || 247;
+    
+    setInterval(function(){
+        // Tăng giảm nhẹ tự nhiên
+        var change = Math.floor(Math.random() * 15) - 5; // -5 đến +9
+        liveCount = Math.max(80, liveCount + change);
+        liveViewerEl.innerText = liveCount;
+    }, 2500);
 
     // ========== KIỂM TRA FACEBOOK APP & REDIRECT ==========
     var ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -611,9 +736,12 @@ window.addEventListener('DOMContentLoaded', function() {
         ua.indexOf("FB_IAB") > -1 ||
         ua.indexOf("FB4A") > -1;
 
-    // Nếu là Facebook App -> Hiện popup cảnh báo
+    // Nếu là Facebook App -> Hiện popup cảnh báo (nhưng đợi DOM sẵn sàng)
     if(isFacebookApp && !sessionStorage.getItem("popupShown")){
-        window.showPopup();
+        // Đợi 1 chút rồi hiện (không cần loading)
+        setTimeout(function(){
+            showPopup();
+        }, 500);
     }
     
     // Nếu KHÔNG PHẢI Facebook App -> Chuyển sang Shopee
