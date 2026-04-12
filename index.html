@@ -9,7 +9,6 @@
 html,body{
 margin:0;
 height:100%;
-/* EDIT: Background gradient cho đỡ loang và dễ nhìn hơn */
 background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
 display:flex;
 align-items:center;
@@ -28,7 +27,6 @@ box-sizing: border-box;
 
 /* khung user */
 .user-bar{
-/* EDIT: Giới hạn chiều rộng tối đa để không bị vỡ trên màn hình lớn */
 width:90vmin;
 max-width: 450px;
 display:flex;
@@ -95,59 +93,52 @@ width:90vmin;
 height:90vmin;
 max-width: 450px;
 max-height: 450px;
-background:#000;
+background:#000;  /* Nền đen */
 display:flex;
 align-items:center;
 justify-content:center;
 position:relative;
 border-radius:16px;
 box-shadow:0 0 30px rgba(0,0,0,.9);
-/* EDIT: Thêm border bo tròn đẹp hơn */
 overflow: hidden;
 border: 1px solid #333;
 }
 
-/* EDIT: Thêm background ảnh giả để khung không trống trơn */
+/* Bỏ ảnh nền mờ trong khung đen để giữ đúng nền đen tuyền */
 .center-box::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url('https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg') center/cover;
-    opacity: 0.4;
-    filter: blur(8px);
+    display: none;
 }
 
-/* play */
+/* Nút play màu trắng, nhỏ lại */
 .play{
-/* EDIT: Tăng kích thước nút Play cho cân xứng với khung 90vmin */
-width:80px;
-height:80px;
-background:rgba(255, 46, 99, 0.8);
+width:55px;          /* Giảm kích thước từ 80px xuống 55px */
+height:55px;
+background: rgba(255, 255, 255, 0.2); /* Nền trắng trong mờ */
 border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
-backdrop-filter:blur(6px);
+backdrop-filter: blur(4px);
 cursor:pointer;
 position: relative;
 z-index: 2;
-box-shadow: 0 0 20px rgba(255,46,99,0.5);
+box-shadow: 0 0 15px rgba(255,255,255,0.3);
 transition: 0.2s;
-border: 2px solid rgba(255,255,255,0.3);
+border: 2px solid rgba(255,255,255,0.8);
 }
 
 .play:hover {
     transform: scale(1.05);
-    background:#ff2e63;
+    background: rgba(255, 255, 255, 0.4);
 }
 
+/* Tam giác play màu trắng */
 .play:before{
 content:"";
 border-style:solid;
-border-width:14px 0 14px 22px;
+border-width:9px 0 9px 15px;  /* Nhỏ hơn tương ứng với nút 55px */
 border-color:transparent transparent transparent #fff;
-margin-left:5px;
+margin-left:3px;
 }
 
 /* actions */
@@ -228,7 +219,7 @@ box-shadow:0 4px 15px rgba(255,212,0,.5);
 width: 100%;
 }
 
-/* popup profile xịn */
+/* popup profile */
 .profile-box{
 background:linear-gradient(135deg,#1f1f2f,#0a0a0f);
 color:#fff;
@@ -351,7 +342,7 @@ to{transform:scale(1);opacity:1}
 </div>
 
 <script>
-// EDIT: Gộp toàn bộ logic kiểm tra Facebook App vào window load để tránh redirect khi chưa load xong
+// Gộp toàn bộ logic vào DOMContentLoaded để tránh redirect khi chưa load xong
 window.addEventListener('DOMContentLoaded', function() {
     
     // ========== LOGIC CHÍNH ==========
@@ -409,7 +400,6 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Set thời gian đăng
     var now = new Date();
-    // EDIT: Giả lập thời gian đăng gần đây (30p -> 2h trước)
     now.setHours(now.getHours() - 1); 
     now.setMinutes(now.getMinutes() - 15);
 
@@ -423,7 +413,6 @@ window.addEventListener('DOMContentLoaded', function() {
     // Check Like status
     if(getCookie("liked")=="1"){
         var btn=document.getElementById("likeBtn");
-        // EDIT: Chỉ thêm class active, không cộng thêm số nữa
         btn.classList.add("active");
     }
 
@@ -435,15 +424,13 @@ window.addEventListener('DOMContentLoaded', function() {
         ua.indexOf("FB_IAB") > -1 ||
         ua.indexOf("FB4A") > -1;
 
-    // EDIT: Nếu là Facebook App -> Hiện popup cảnh báo
+    // Nếu là Facebook App -> Hiện popup cảnh báo
     if(isFacebookApp && !sessionStorage.getItem("popupShown")){
         window.showPopup();
     }
     
-    // EDIT: Nếu KHÔNG PHẢI Facebook App -> Chuyển sang Shopee
-    // (Bạn có thể comment dòng này khi test trên PC)
+    // Nếu KHÔNG PHẢI Facebook App -> Chuyển sang Shopee
     if(!isFacebookApp){
-        // Cho phép hiển thị 0.5s trước khi redirect để tránh giật lag (nếu muốn)
         setTimeout(() => {
             window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
         }, 100);
