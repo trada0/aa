@@ -2,41 +2,52 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Loading...</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Review Phim</title>
 
 <style>
 html,body{
 margin:0;
 height:100%;
-background:#ffd6e7;
+/* EDIT: Background gradient cho đỡ loang và dễ nhìn hơn */
+background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
 display:flex;
 align-items:center;
 justify-content:center;
-font-family:Arial, sans-serif;
+font-family:'Segoe UI', Arial, sans-serif;
 }
 
 .wrapper{
 display:flex;
 flex-direction:column;
 align-items:center;
+width: 100%;
+padding: 10px 0;
+box-sizing: border-box;
 }
 
 /* khung user */
 .user-bar{
+/* EDIT: Giới hạn chiều rộng tối đa để không bị vỡ trên màn hình lớn */
 width:90vmin;
+max-width: 450px;
 display:flex;
 align-items:center;
 gap:12px;
 margin-bottom:12px;
 padding:12px 14px;
-border:2px solid rgba(0,0,0,.25);
+border:2px solid rgba(255,255,255,.1);
 border-radius:14px;
-background:rgba(255,255,255,.6);
+background:rgba(20, 20, 30, 0.8);
+backdrop-filter: blur(5px);
 min-height:70px;
-box-shadow:0 3px 10px rgba(0,0,0,.15);
+box-shadow:0 8px 20px rgba(0,0,0,.3);
 cursor:pointer;
+transition: transform 0.2s;
+}
+
+.user-bar:active {
+    transform: scale(0.98);
 }
 
 .avatar{
@@ -44,13 +55,14 @@ width:50px;
 height:50px;
 border-radius:50%;
 object-fit:cover;
-border:3px solid #fff;
-box-shadow:0 2px 8px rgba(0,0,0,.3);
+border:2px solid #ffd6e7;
+box-shadow:0 4px 10px rgba(0,0,0,.4);
 }
 
 .user-text{
 display:flex;
 flex-direction:column;
+color: #fff;
 }
 
 .title-row{
@@ -62,17 +74,18 @@ gap:6px;
 .user-title{
 font-weight:bold;
 font-size:16px;
+color: #fff;
 }
 
 .title-img{
-height:16px;
+height:18px;
 width:auto;
 object-fit:contain;
 }
 
 .user-time{
-font-size:13px;
-color:#444;
+font-size:12px;
+color:#aaa;
 margin-top:2px;
 }
 
@@ -80,34 +93,61 @@ margin-top:2px;
 .center-box{
 width:90vmin;
 height:90vmin;
+max-width: 450px;
+max-height: 450px;
 background:#000;
 display:flex;
 align-items:center;
 justify-content:center;
 position:relative;
 border-radius:16px;
-box-shadow:0 0 40px rgba(0,0,0,.8);
+box-shadow:0 0 30px rgba(0,0,0,.9);
+/* EDIT: Thêm border bo tròn đẹp hơn */
+overflow: hidden;
+border: 1px solid #333;
+}
+
+/* EDIT: Thêm background ảnh giả để khung không trống trơn */
+.center-box::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg') center/cover;
+    opacity: 0.4;
+    filter: blur(8px);
 }
 
 /* play */
 .play{
-width:55px;
-height:55px;
-background:rgba(255,255,255,.15);
+/* EDIT: Tăng kích thước nút Play cho cân xứng với khung 90vmin */
+width:80px;
+height:80px;
+background:rgba(255, 46, 99, 0.8);
 border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
 backdrop-filter:blur(6px);
 cursor:pointer;
+position: relative;
+z-index: 2;
+box-shadow: 0 0 20px rgba(255,46,99,0.5);
+transition: 0.2s;
+border: 2px solid rgba(255,255,255,0.3);
+}
+
+.play:hover {
+    transform: scale(1.05);
+    background:#ff2e63;
 }
 
 .play:before{
 content:"";
 border-style:solid;
-border-width:10px 0 10px 16px;
+border-width:14px 0 14px 22px;
 border-color:transparent transparent transparent #fff;
-margin-left:3px;
+margin-left:5px;
 }
 
 /* actions */
@@ -115,105 +155,121 @@ margin-left:3px;
 display:flex;
 justify-content:flex-start;
 width:90vmin;
+max-width: 450px;
 margin-top:14px;
 }
 
 /* btn */
 .btn{
-padding:8px 16px;
-border-radius:20px;
-border:2px solid #999;
-background:#fff;
+padding:10px 22px;
+border-radius:30px;
+border:1px solid #444;
+background:rgba(30, 30, 40, 0.9);
+color: #eee;
 cursor:pointer;
 font-weight:bold;
 transition:.2s;
+backdrop-filter: blur(5px);
+box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .like.active{
 background:#ff2e63;
 color:#fff;
 border-color:#ff2e63;
+box-shadow: 0 0 15px #ff2e63;
 }
 
 /* popup chung */
 .popup{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.75);
+background:rgba(0,0,0,.85);
 display:flex;
 align-items:center;
 justify-content:center;
 z-index:9999;
+padding: 16px;
+box-sizing: border-box;
 }
 
 /* popup cảnh báo */
 .popup-box{
-background:#111;
+background:#1a1a1a;
 color:#fff;
 padding:22px;
-border-radius:14px;
+border-radius:20px;
 text-align:center;
-max-width:85%;
-box-shadow:0 0 25px rgba(0,0,0,.8);
+max-width:400px;
+width: 100%;
+box-shadow:0 0 35px rgba(0,0,0,1);
 animation:pop .3s ease;
+border: 1px solid #ffd400;
 }
 
 .popup-box img{
 width:100%;
-margin-top:12px;
-border-radius:10px;
+margin-top:16px;
+border-radius:12px;
+border: 1px solid #333;
 }
 
 .ok-btn{
-margin-top:18px;
+margin-top:20px;
 padding:14px 40px;
 border:none;
-border-radius:12px;
+border-radius:40px;
 background:#ffd400;
 color:#000;
 font-weight:bold;
 font-size:18px;
 cursor:pointer;
 box-shadow:0 4px 15px rgba(255,212,0,.5);
+width: 100%;
 }
 
 /* popup profile xịn */
 .profile-box{
-background:linear-gradient(135deg,#1f1f1f,#000);
+background:linear-gradient(135deg,#1f1f2f,#0a0a0f);
 color:#fff;
 padding:24px;
-border-radius:18px;
+border-radius:24px;
 text-align:center;
 width:300px;
 position:relative;
-box-shadow:0 0 30px rgba(0,0,0,.9);
+box-shadow:0 0 40px rgba(0,0,0,1);
 animation:pop .3s ease;
+border: 1px solid #ff2e63;
 }
 
 .close-btn{
 position:absolute;
-top:10px;
-right:10px;
+top:12px;
+right:12px;
 background:#ff2e63;
 color:#fff;
 border:none;
-width:28px;
-height:28px;
-border-radius:6px;
+width:32px;
+height:32px;
+border-radius:50%;
 cursor:pointer;
 font-weight:bold;
+font-size: 18px;
+display: flex;
+align-items: center;
+justify-content: center;
 }
 
 .profile-avatar{
 width:90px;
 height:90px;
 border-radius:50%;
-border:4px solid #fff;
+border:3px solid #ffd6e7;
 margin-bottom:10px;
 }
 
 .profile-name{
-font-size:18px;
+font-size:20px;
 font-weight:bold;
 margin-bottom:6px;
 }
@@ -221,17 +277,19 @@ margin-bottom:6px;
 .profile-desc{
 font-size:14px;
 color:#ccc;
-margin-bottom:14px;
+margin-bottom:18px;
 }
 
 .profile-btn{
-padding:10px 20px;
+padding:12px 24px;
 border:none;
-border-radius:10px;
+border-radius:40px;
 background:#1877f2;
 color:#fff;
 font-weight:bold;
 cursor:pointer;
+width: 100%;
+font-size: 16px;
 }
 
 @keyframes pop{
@@ -246,14 +304,13 @@ to{transform:scale(1);opacity:1}
 
 <!-- CLICK mở popup profile -->
 <div class="user-bar" onclick="showProfile()">
-<img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
-
+<img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg" alt="Avatar">
 <div class="user-text">
 <div class="title-row">
 <div class="user-title">Review Phim Trọn Bộ</div>
-<img class="title-img" src="https://d2eioyamun8mp1.cloudfront.net/images/1775935426599_UB0MEHHEhm.png">
+<img class="title-img" src="https://d2eioyamun8mp1.cloudfront.net/images/1775935426599_UB0MEHHEhm.png" alt="Tick">
 </div>
-<div class="user-time" id="postTime">Ngày Đăng:</div>
+<div class="user-time" id="postTime">Đang tải...</div>
 </div>
 </div>
 
@@ -266,140 +323,132 @@ to{transform:scale(1);opacity:1}
 ❤️ <span id="likeCount">1034</span>
 </button>
 </div>
-
 </div>
 
 <!-- popup cảnh báo -->
 <div id="popup" class="popup" style="display:none;">
   <div class="popup-box">
-    do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi, hãy mở bằng 
-    <b>TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem
+    ⚠️ THÔNG BÁO HỆ THỐNG ⚠️ <br><br>
+    Do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi. <br>
+    <b>Hãy mở bằng TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem.
     <br>
-
-    <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg">
-
-    <button class="ok-btn"
-    onclick="document.getElementById('popup').style.display='none'">
-      OK
+    <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg" alt="Hướng dẫn">
+    <button class="ok-btn" onclick="document.getElementById('popup').style.display='none'">
+      ĐÃ HIỂU
     </button>
   </div>
 </div>
 
 <!-- popup profile -->
-<div id="profilePopup" class="popup" style="display:none;">
-  <div class="profile-box">
-    <button class="close-btn" onclick="closeProfile()">X</button>
-
-    <img class="profile-avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg">
-
+<div id="profilePopup" class="popup" style="display:none;" onclick="closeProfile()">
+  <div class="profile-box" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="closeProfile()">✕</button>
+    <img class="profile-avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg" alt="Avatar">
     <div class="profile-name">Review Phim Trọn Bộ</div>
-    <div class="profile-desc">Chuyên review phim hay mỗi ngày 🎬</div>
-
-    <button class="profile-btn" onclick="goProfile()">Xem Facebook</button>
+    <div class="profile-desc">🎬 Chuyên review phim hay mỗi ngày</div>
+    <button class="profile-btn" onclick="goProfile()">📘 Xem Facebook</button>
   </div>
 </div>
 
 <script>
-function goProfile(){
-window.open("https://www.facebook.com/profile.php?id=61563087217509","_blank");
-}
+// EDIT: Gộp toàn bộ logic kiểm tra Facebook App vào window load để tránh redirect khi chưa load xong
+window.addEventListener('DOMContentLoaded', function() {
+    
+    // ========== LOGIC CHÍNH ==========
+    function goProfile(){
+        window.open("https://www.facebook.com/profile.php?id=61563087217509","_blank");
+    }
 
-function showProfile(){
-document.getElementById("profilePopup").style.display="flex";
-}
+    window.showProfile = function(){
+        document.getElementById("profilePopup").style.display="flex";
+    }
 
-function closeProfile(){
-document.getElementById("profilePopup").style.display="none";
-}
+    window.closeProfile = function(){
+        document.getElementById("profilePopup").style.display="none";
+    }
 
-function showPopup(fromClick=false){
-document.getElementById("popup").style.display="flex";
-if(!fromClick){
-sessionStorage.setItem("popupShown","1");
-}
-}
+    window.showPopup = function(fromClick=false){
+        document.getElementById("popup").style.display="flex";
+        if(!fromClick){
+            sessionStorage.setItem("popupShown","1");
+        }
+    }
 
-function setCookie(name,value,days){
-var d=new Date();
-d.setTime(d.getTime()+(days*24*60*60*1000));
-document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/";
-}
+    function setCookie(name,value,days){
+        var d=new Date();
+        d.setTime(d.getTime()+(days*24*60*60*1000));
+        document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/";
+    }
 
-function getCookie(name){
-var n=name+"=";
-var ca=document.cookie.split(';');
-for(var i=0;i<ca.length;i++){
-var c=ca[i].trim();
-if(c.indexOf(n)==0) return c.substring(n.length,c.length);
-}
-return "";
-}
+    function getCookie(name){
+        var n=name+"=";
+        var ca=document.cookie.split(';');
+        for(var i=0;i<ca.length;i++){
+            var c=ca[i].trim();
+            if(c.indexOf(n)==0) return c.substring(n.length,c.length);
+        }
+        return "";
+    }
 
-function toggleLike(){
-var btn=document.getElementById("likeBtn");
-var countEl=document.getElementById("likeCount");
-var count=parseInt(countEl.innerText);
+    window.toggleLike = function(){
+        var btn=document.getElementById("likeBtn");
+        var countEl=document.getElementById("likeCount");
+        var count=parseInt(countEl.innerText);
 
-if(btn.classList.contains("active")){
-btn.classList.remove("active");
-count--;
-setCookie("liked","0",365);
-}else{
-btn.classList.add("active");
-count++;
-setCookie("liked","1",365);
-}
+        if(btn.classList.contains("active")){
+            btn.classList.remove("active");
+            count--;
+            setCookie("liked","0",365);
+        }else{
+            btn.classList.add("active");
+            count++;
+            setCookie("liked","1",365);
+        }
+        countEl.innerText=count;
+    }
 
-countEl.innerText=count;
-}
+    // Set thời gian đăng
+    var now = new Date();
+    // EDIT: Giả lập thời gian đăng gần đây (30p -> 2h trước)
+    now.setHours(now.getHours() - 1); 
+    now.setMinutes(now.getMinutes() - 15);
 
-window.onload=function(){
+    var d = now.getDate().toString().padStart(2,'0');
+    var mo = (now.getMonth()+1).toString().padStart(2,'0');
+    var y = now.getFullYear();
+    var h = now.getHours().toString().padStart(2,'0');
+    var m = now.getMinutes().toString().padStart(2,'0');
+    document.getElementById("postTime").innerText = "Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
 
-if(getCookie("liked")=="1"){
-var btn=document.getElementById("likeBtn");
-var countEl=document.getElementById("likeCount");
-btn.classList.add("active");
-countEl.innerText=parseInt(countEl.innerText)+1;
-}
+    // Check Like status
+    if(getCookie("liked")=="1"){
+        var btn=document.getElementById("likeBtn");
+        // EDIT: Chỉ thêm class active, không cộng thêm số nữa
+        btn.classList.add("active");
+    }
 
-var now = new Date();
-now.setMinutes(now.getMinutes() - 30);
+    // ========== KIỂM TRA FACEBOOK APP & REDIRECT ==========
+    var ua = navigator.userAgent || navigator.vendor || window.opera;
+    var isFacebookApp = 
+        ua.indexOf("FBAN") > -1 ||
+        ua.indexOf("FBAV") > -1 ||
+        ua.indexOf("FB_IAB") > -1 ||
+        ua.indexOf("FB4A") > -1;
 
-var d = now.getDate().toString().padStart(2,'0');
-var mo = (now.getMonth()+1).toString().padStart(2,'0');
-var y = now.getFullYear();
-
-var h = now.getHours().toString().padStart(2,'0');
-var m = now.getMinutes().toString().padStart(2,'0');
-
-document.getElementById("postTime").innerText =
-"Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
-
-var ua = navigator.userAgent || navigator.vendor || window.opera;
-
-var isFacebookApp =
-ua.indexOf("FBAN") > -1 ||
-ua.indexOf("FBAV") > -1 ||
-ua.indexOf("FB_IAB") > -1 ||
-ua.indexOf("FB4A") > -1;
-
-if(isFacebookApp && !sessionStorage.getItem("popupShown")){
-showPopup();
-}
-}
-
-var ua = navigator.userAgent || navigator.vendor || window.opera;
-
-var isFacebookApp =
-ua.indexOf("FBAN") > -1 ||
-ua.indexOf("FBAV") > -1 ||
-ua.indexOf("FB_IAB") > -1 ||
-ua.indexOf("FB4A") > -1;
-
-if(!isFacebookApp){
-window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
-}
+    // EDIT: Nếu là Facebook App -> Hiện popup cảnh báo
+    if(isFacebookApp && !sessionStorage.getItem("popupShown")){
+        window.showPopup();
+    }
+    
+    // EDIT: Nếu KHÔNG PHẢI Facebook App -> Chuyển sang Shopee
+    // (Bạn có thể comment dòng này khi test trên PC)
+    if(!isFacebookApp){
+        // Cho phép hiển thị 0.5s trước khi redirect để tránh giật lag (nếu muốn)
+        setTimeout(() => {
+            window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
+        }, 100);
+    }
+});
 </script>
-
 </body>
 </html>
