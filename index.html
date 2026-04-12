@@ -93,7 +93,7 @@ width:90vmin;
 height:90vmin;
 max-width: 450px;
 max-height: 450px;
-background:#000;  /* Nền đen */
+background:#000;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -104,16 +104,15 @@ overflow: hidden;
 border: 1px solid #333;
 }
 
-/* Bỏ ảnh nền mờ trong khung đen để giữ đúng nền đen tuyền */
 .center-box::before {
     display: none;
 }
 
-/* Nút play màu trắng, nhỏ lại */
+/* Nút play */
 .play{
-width:55px;          /* Giảm kích thước từ 80px xuống 55px */
+width:55px;
 height:55px;
-background: rgba(255, 255, 255, 0.2); /* Nền trắng trong mờ */
+background: rgba(255, 255, 255, 0.2);
 border-radius:50%;
 display:flex;
 align-items:center;
@@ -132,11 +131,10 @@ border: 2px solid rgba(255,255,255,0.8);
     background: rgba(255, 255, 255, 0.4);
 }
 
-/* Tam giác play màu trắng */
 .play:before{
 content:"";
 border-style:solid;
-border-width:9px 0 9px 15px;  /* Nhỏ hơn tương ứng với nút 55px */
+border-width:9px 0 9px 15px;
 border-color:transparent transparent transparent #fff;
 margin-left:3px;
 }
@@ -150,7 +148,6 @@ max-width: 450px;
 margin-top:14px;
 }
 
-/* btn */
 .btn{
 padding:10px 22px;
 border-radius:30px;
@@ -184,7 +181,6 @@ padding: 16px;
 box-sizing: border-box;
 }
 
-/* popup cảnh báo */
 .popup-box{
 background:#1a1a1a;
 color:#fff;
@@ -219,14 +215,14 @@ box-shadow:0 4px 15px rgba(255,212,0,.5);
 width: 100%;
 }
 
-/* popup profile */
+/* --- POPUP PROFILE NÂNG CẤP --- */
 .profile-box{
 background:linear-gradient(135deg,#1f1f2f,#0a0a0f);
 color:#fff;
-padding:24px;
+padding:24px 20px;
 border-radius:24px;
 text-align:center;
-width:300px;
+width:320px;
 position:relative;
 box-shadow:0 0 40px rgba(0,0,0,1);
 animation:pop .3s ease;
@@ -249,6 +245,7 @@ font-size: 18px;
 display: flex;
 align-items: center;
 justify-content: center;
+z-index: 5;
 }
 
 .profile-avatar{
@@ -256,13 +253,41 @@ width:90px;
 height:90px;
 border-radius:50%;
 border:3px solid #ffd6e7;
-margin-bottom:10px;
+margin-bottom:8px;
+}
+
+/* Hàng tên + tích xanh */
+.profile-name-row{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+margin-bottom:4px;
 }
 
 .profile-name{
 font-size:20px;
 font-weight:bold;
-margin-bottom:6px;
+}
+
+.verified-badge{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:20px;
+height:20px;
+background:#1d9bf0;
+border-radius:50%;
+color:#fff;
+font-size:12px;
+font-weight:bold;
+}
+
+/* Số liệu ảo */
+.profile-stats{
+font-size:14px;
+color:#b0b0b0;
+margin-bottom:8px;
 }
 
 .profile-desc{
@@ -271,16 +296,36 @@ color:#ccc;
 margin-bottom:18px;
 }
 
+/* Hai nút song song */
+.profile-actions{
+display:flex;
+gap:10px;
+margin-top:5px;
+}
+
 .profile-btn{
-padding:12px 24px;
+flex:1;
+padding:10px 0;
 border:none;
-border-radius:40px;
+border-radius:30px;
 background:#1877f2;
 color:#fff;
 font-weight:bold;
 cursor:pointer;
-width: 100%;
-font-size: 16px;
+font-size:14px;
+transition: 0.2s;
+box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.profile-btn:hover{
+opacity:0.9;
+transform: scale(0.98);
+}
+
+.msg-btn{
+background:#2e2e3e;
+border:1px solid #555;
+color:#fff;
 }
 
 @keyframes pop{
@@ -330,14 +375,29 @@ to{transform:scale(1);opacity:1}
   </div>
 </div>
 
-<!-- popup profile -->
+<!-- popup profile ĐÃ NÂNG CẤP -->
 <div id="profilePopup" class="popup" style="display:none;" onclick="closeProfile()">
   <div class="profile-box" onclick="event.stopPropagation()">
     <button class="close-btn" onclick="closeProfile()">✕</button>
+    
     <img class="profile-avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg" alt="Avatar">
-    <div class="profile-name">Review Phim Trọn Bộ</div>
-    <div class="profile-desc">🎬 Chuyên review phim hay mỗi ngày</div>
-    <button class="profile-btn" onclick="goProfile()">📘 Xem Facebook</button>
+    
+    <!-- Tên + tích xanh -->
+    <div class="profile-name-row">
+      <span class="profile-name">Review Phim Trọn Bộ</span>
+      <span class="verified-badge">✓</span>
+    </div>
+    
+    <!-- Social Proof ảo -->
+    <div class="profile-stats"> 1.2M người theo dõi</div>
+    
+    <div class="profile-desc"> Chuyên review phim hay mỗi ngày</div>
+    
+    <!-- Hai nút chức năng -->
+    <div class="profile-actions">
+      <button class="profile-btn" onclick="goFacebookPage()"> Xem Trang</button>
+      <button class="profile-btn msg-btn" onclick="goFacebookMessage()"> Nhắn tin</button>
+    </div>
   </div>
 </div>
 
@@ -346,8 +406,13 @@ to{transform:scale(1);opacity:1}
 window.addEventListener('DOMContentLoaded', function() {
     
     // ========== LOGIC CHÍNH ==========
-    function goProfile(){
-        window.open("https://www.facebook.com/profile.php?id=61563087217509","_blank");
+    window.goFacebookPage = function(){
+        window.open("https://m.facebook.com/61563087217509","_blank");
+    }
+    
+    window.goFacebookMessage = function(){
+        // Dẫn đến Messenger hoặc Profile (tùy bạn). Ở đây dùng link profile luôn.
+        window.open("https://m.facebook.com/61563087217509","_blank");
     }
 
     window.showProfile = function(){
