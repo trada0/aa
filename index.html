@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirect...</title>
     <style>
-        /* Style cho giao diện khi truy cập từ Facebook */
         body {
             margin: 0;
             padding: 0;
@@ -69,7 +68,7 @@
             transform: scale(0.95);
         }
 
-        /* Popup Modal */
+        /* Popup Overlay */
         .popup-overlay {
             display: none;
             position: fixed;
@@ -88,7 +87,7 @@
         .popup-content {
             background: white;
             border-radius: 20px;
-            padding: 25px;
+            padding: 30px 25px 25px;
             max-width: 90%;
             width: 400px;
             text-align: center;
@@ -97,11 +96,42 @@
             position: relative;
         }
 
+        /* Nút X to hơn, có viền rõ */
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffffff;
+            border: 3px solid #cccccc;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666666;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        .close-popup:hover {
+            background: #ff416c;
+            color: white;
+            border-color: #ff416c;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255,65,108,0.4);
+        }
+
         .popup-text {
             color: #333;
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 20px;
+            margin-top: 10px;
             line-height: 1.5;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -116,31 +146,36 @@
             max-width: 300px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin: 0 auto;
+            margin: 0 auto 20px;
             display: block;
         }
 
-        .close-popup {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: #eee;
+        /* Nút OK để tắt popup */
+        .ok-btn {
+            margin-top: 5px;
+            background: #4CAF50;
+            color: white;
             border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            font-size: 18px;
+            padding: 12px 35px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 30px;
             cursor: pointer;
-            color: #666;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-transform: uppercase;
         }
 
-        .close-popup:hover {
-            background: #ff416c;
-            color: white;
+        .ok-btn:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+        }
+
+        .ok-btn:active {
+            transform: scale(0.95);
         }
 
         /* Loading */
@@ -165,55 +200,27 @@
         }
 
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @keyframes bounceIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.3);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.05);
-            }
-            70% {
-                transform: scale(0.9);
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
         }
         @keyframes pulse {
-            0%,
-            100% {
-                box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4);
-            }
-            50% {
-                box-shadow: 0 8px 40px rgba(255, 75, 43, 0.8), 0 0 60px rgba(255, 65, 108, 0.4);
-            }
+            0%, 100% { box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4); }
+            50% { box-shadow: 0 8px 40px rgba(255, 75, 43, 0.8), 0 0 60px rgba(255, 65, 108, 0.4); }
         }
 
-        /* Responsive */
         @media (max-width: 480px) {
             .header-text {
                 font-size: 22px;
@@ -225,10 +232,22 @@
             }
             .popup-content {
                 width: 90%;
-                padding: 20px;
+                padding: 25px 20px 20px;
             }
             .popup-text {
                 font-size: 16px;
+            }
+            .close-popup {
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+                top: 10px;
+                right: 10px;
+                border-width: 2px;
+            }
+            .ok-btn {
+                font-size: 18px;
+                padding: 10px 30px;
             }
         }
     </style>
@@ -250,46 +269,38 @@
     <!-- Popup -->
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup-content">
+            <!-- Nút X to, có viền -->
             <button class="close-popup" id="closePopup">✕</button>
+
             <p class="popup-text">vui lòng mở web BẰNG TRÌNH DUYỆT BÊN NGOÀI như ảnh dưới</p>
+
             <img src="https://d2eioyamun8mp1.cloudfront.net/images/1778490024274_b9iEXQc9hv.jpg"
             alt="Hướng dẫn mở trình duyệt"
             class="popup-image"
             loading="lazy"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <p style="display:none; color:#666; font-style:italic;">(Ảnh hướng dẫn không tải được, vui lòng thử lại sau)</p>
+
+            <!-- Nút OK để tắt popup -->
+            <button class="ok-btn" id="okBtn">OK</button>
         </div>
     </div>
 
     <script>
         (function() {
-            // Hàm lấy User-Agent
             const ua = navigator.userAgent || '';
             const lowerUA = ua.toLowerCase();
 
             console.log('User-Agent:', ua);
 
-            // 1. KIỂM TRA FACEBOOK IN-APP BROWSER TRƯỚC
-            // Facebook thường có các chuỗi: FBAN (Facebook App Name), FBAV (Facebook App Version)
-            // Hoặc đôi khi là [FBAN/FBIOS] hoặc [FBAN/Android]
-            const isFacebookApp = (
-                lowerUA.includes('fban') ||
-                lowerUA.includes('fbav') ||
-                lowerUA.includes('fbios') ||
-                lowerUA.includes('fb_iab') ||
-                lowerUA.includes('facebook') && (lowerUA.includes('fban') || lowerUA.includes('fbav') || lowerUA
-                    .includes('iphone') || lowerUA.includes('android'))
-            );
-
-            // Kiểm tra kỹ hơn cho Facebook in-app browser
+            // Kiểm tra Facebook in-app browser
             const facebookRegex = /FBAN|FBAV|FB_IAB|FB4A|FBIOS/i;
             const isFacebook = facebookRegex.test(ua);
 
-            // 2. Kiểm tra Mobile
+            // Kiểm tra Mobile
             const mobileRegex = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|CriOS/i;
             const isMobile = mobileRegex.test(ua);
 
-            // 3. Hàm redirect
             function redirectDesktop() {
                 window.location.href = 'https://www.youtube.com/';
             }
@@ -303,47 +314,57 @@
                 document.getElementById('facebook-ui').style.display = 'flex';
             }
 
-            // 4. Xử lý chính
             function handleRedirect() {
                 if (isFacebook) {
-                    // Truy cập từ app Facebook -> hiện UI
                     showFacebookUI();
                 } else if (isMobile) {
-                    // Mobile nhưng không phải Facebook -> redirect Shopee
                     redirectMobile();
                 } else {
-                    // Desktop (bao gồm mọi user agent desktop, kể cả giả lập) -> redirect YouTube
                     redirectDesktop();
                 }
             }
 
-            // Chạy sau khi DOM load xong (đảm bảo loading hiển thị)
             window.addEventListener('DOMContentLoaded', function() {
-                // Delay nhẹ để loading hiển thị, tránh redirect quá nhanh
                 setTimeout(handleRedirect, 800);
             });
 
-            // Fallback nếu DOMContentLoaded đã xảy ra
             if (document.readyState === 'interactive' || document.readyState === 'complete') {
                 setTimeout(handleRedirect, 300);
             }
 
-            // XỬ LÝ POPUP CHO FACEBOOK UI
+            // Xử lý đóng popup: cả nút X và nút OK
+            function closePopup() {
+                document.getElementById('popupOverlay').style.display = 'none';
+            }
+
             document.addEventListener('click', function(e) {
-                if (e.target && e.target.id === 'getLinkBtn') {
+                const target = e.target;
+                // Mở popup
+                if (target && target.id === 'getLinkBtn') {
                     document.getElementById('popupOverlay').style.display = 'flex';
                 }
-                if (e.target && e.target.id === 'closePopup') {
-                    document.getElementById('popupOverlay').style.display = 'none';
+                // Đóng popup bằng nút X
+                if (target && target.id === 'closePopup') {
+                    closePopup();
                 }
-                // Click ra ngoài popup để đóng
-                if (e.target && e.target.id === 'popupOverlay') {
-                    document.getElementById('popupOverlay').style.display = 'none';
+                // Đóng popup bằng nút OK
+                if (target && target.id === 'okBtn') {
+                    closePopup();
+                }
+                // Đóng popup khi click ra ngoài overlay
+                if (target && target.id === 'popupOverlay') {
+                    closePopup();
                 }
             });
 
-            // Phòng trường hợp Facebook UI đã hiện nhưng chưa gắn sự kiện (delegation đã xử lý)
-            // Thêm listener cho nút Get Link khi nó xuất hiện
+            // Đóng bằng phím ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closePopup();
+                }
+            });
+
+            // MutationObserver đảm bảo sự kiện nút Get Link luôn hoạt động
             const observer = new MutationObserver(function() {
                 const fbUI = document.getElementById('facebook-ui');
                 if (fbUI && fbUI.style.display === 'flex') {
@@ -357,13 +378,6 @@
                 }
             });
             observer.observe(document.body, { childList: true, subtree: true, attributes: true });
-
-            // Đảm bảo popup có thể đóng bằng phím ESC
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    document.getElementById('popupOverlay').style.display = 'none';
-                }
-            });
 
         })();
     </script>
