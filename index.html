@@ -1,816 +1,371 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Review Phim</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect...</title>
+    <style>
+        /* Style cho giao diện khi truy cập từ Facebook */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
 
-<style>
-html,body{
-margin:0;
-height:100%;
-background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
-display:flex;
-align-items:center;
-justify-content:center;
-font-family:'Segoe UI', Arial, sans-serif;
-}
+        #facebook-ui {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
 
-.wrapper{
-display:flex;
-flex-direction:column;
-align-items:center;
-width: 100%;
-padding: 10px 0;
-box-sizing: border-box;
-}
+        .header-text {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            line-height: 1.4;
+            animation: fadeInDown 0.8s ease;
+        }
 
-/* khung user */
-.user-bar{
-width:90vmin;
-max-width: 450px;
-display:flex;
-align-items:center;
-gap:12px;
-margin-bottom:8px;
-padding:12px 14px;
-border:2px solid rgba(255,255,255,.1);
-border-radius:14px;
-background:rgba(20, 20, 30, 0.8);
-backdrop-filter: blur(5px);
-min-height:70px;
-box-shadow:0 8px 20px rgba(0,0,0,.3);
-cursor:pointer;
-transition: transform 0.2s;
-}
+        .get-link-btn {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+            margin-top: 20px;
+        }
 
-.user-bar:active {
-    transform: scale(0.98);
-}
+        .get-link-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 75, 43, 0.6);
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+        }
 
-.avatar{
-width:50px;
-height:50px;
-border-radius:50%;
-object-fit:cover;
-border:2px solid #ffd6e7;
-box-shadow:0 4px 10px rgba(0,0,0,.4);
-}
+        .get-link-btn:active {
+            transform: scale(0.95);
+        }
 
-.user-text{
-display:flex;
-flex-direction:column;
-color: #fff;
-}
+        /* Popup Modal */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+        }
 
-.title-row{
-display:flex;
-align-items:center;
-gap:6px;
-}
+        .popup-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: bounceIn 0.5s ease;
+            position: relative;
+        }
 
-.user-title{
-font-weight:bold;
-font-size:16px;
-color: #fff;
-}
+        .popup-text {
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-.title-img{
-height:18px;
-width:auto;
-object-fit:contain;
-}
+        .popup-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+            display: block;
+        }
 
-.user-time{
-font-size:12px;
-color:#aaa;
-margin-top:2px;
-}
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #eee;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-/* --- CAPTION --- */
-.post-caption{
-width:90vmin;
-max-width: 450px;
-margin-bottom: 12px;
-padding: 0 8px;
-box-sizing: border-box;
-}
+        .close-popup:hover {
+            background: #ff416c;
+            color: white;
+        }
 
-.caption-text{
-color: #fff;
-font-size: 15px;
-line-height: 1.4;
-margin-bottom: 6px;
-}
+        /* Loading */
+        #loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 20px;
+            color: #555;
+            font-family: Arial, sans-serif;
+        }
 
-.caption-hashtags{
-color: #9ab3ff;
-font-size: 13px;
-word-break: break-word;
-}
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ddd;
+            border-top-color: #ff4b2b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 15px;
+        }
 
-/* khung đen */
-.center-box{
-width:90vmin;
-height:90vmin;
-max-width: 450px;
-max-height: 450px;
-background:#000;
-display:flex;
-align-items:center;
-justify-content:center;
-position:relative;
-border-radius:16px;
-box-shadow:0 0 30px rgba(0,0,0,.9);
-overflow: hidden;
-border: 1px solid #333;
-}
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4);
+            }
+            50% {
+                box-shadow: 0 8px 40px rgba(255, 75, 43, 0.8), 0 0 60px rgba(255, 65, 108, 0.4);
+            }
+        }
 
-.center-box::before {
-    display: none;
-}
-
-/* Nút play */
-.play{
-width:55px;
-height:55px;
-background: rgba(255, 255, 255, 0.2);
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-backdrop-filter: blur(4px);
-cursor:pointer;
-position: relative;
-z-index: 2;
-box-shadow: 0 0 15px rgba(255,255,255,0.3);
-transition: 0.2s;
-border: 2px solid rgba(255,255,255,0.8);
-}
-
-.play:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.4);
-}
-
-.play:before{
-content:"";
-border-style:solid;
-border-width:9px 0 9px 15px;
-border-color:transparent transparent transparent #fff;
-margin-left:3px;
-}
-
-/* --- BADGE NGƯỜI ĐANG XEM --- */
-.live-viewers{
-position: absolute;
-top: 12px;
-left: 14px;
-background: rgba(0,0,0,0.7);
-backdrop-filter: blur(4px);
-padding: 6px 12px;
-border-radius: 30px;
-display: flex;
-align-items: center;
-gap: 6px;
-color: #fff;
-font-size: 13px;
-font-weight: bold;
-z-index: 10;
-border: 1px solid rgba(255,255,255,0.3);
-box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-pointer-events: none;
-}
-
-.pulse-dot{
-width: 10px;
-height: 10px;
-background: #ff3b30;
-border-radius: 50%;
-display: inline-block;
-animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-/* --- HIỆU ỨNG LOADING GIẢ --- */
-.video-loader{
-position: absolute;
-inset: 0;
-background: rgba(0,0,0,0.85);
-backdrop-filter: blur(8px);
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-z-index: 15;
-color: #fff;
-gap: 15px;
-transition: opacity 0.3s;
-}
-
-.loader-spinner{
-width: 50px;
-height: 50px;
-border: 4px solid rgba(255,255,255,0.2);
-border-top: 4px solid #ffd400;
-border-radius: 50%;
-animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* --- THANH THỐNG KÊ ẢO --- */
-.stats-bar{
-width:90vmin;
-max-width: 450px;
-display:flex;
-justify-content: space-between;
-align-items: center;
-margin-top: 12px;
-margin-bottom: 8px;
-padding: 0 8px;
-box-sizing: border-box;
-color: #b0b0b0;
-font-size: 13px;
-}
-
-.stats-left{
-display: flex;
-align-items: center;
-gap: 12px;
-}
-
-.stat-item{
-display: flex;
-align-items: center;
-gap: 4px;
-}
-
-.stat-icon{
-font-size: 14px;
-}
-
-/* actions (like button) */
-.actions{
-display:flex;
-justify-content:flex-start;
-width:90vmin;
-max-width: 450px;
-margin-top: 5px;
-}
-
-.btn{
-padding:10px 22px;
-border-radius:30px;
-border:1px solid #444;
-background:rgba(30, 30, 40, 0.9);
-color: #eee;
-cursor:pointer;
-font-weight:bold;
-transition:.2s;
-backdrop-filter: blur(5px);
-box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.like.active{
-background:#ff2e63;
-color:#fff;
-border-color:#ff2e63;
-box-shadow: 0 0 15px #ff2e63;
-}
-
-/* popup chung */
-.popup{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.85);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-padding: 16px;
-box-sizing: border-box;
-}
-
-/* Hiệu ứng rung (shake) */
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-8px); }
-    40% { transform: translateX(8px); }
-    60% { transform: translateX(-4px); }
-    80% { transform: translateX(4px); }
-}
-
-.shake-animation {
-    animation: shake 0.4s ease-in-out;
-}
-
-.popup-box{
-background:#1a1a1a;
-color:#fff;
-padding:22px;
-border-radius:20px;
-text-align:center;
-max-width:400px;
-width: 100%;
-box-shadow:0 0 35px rgba(0,0,0,1);
-border: 1px solid #ffd400;
-}
-
-.popup-box img{
-width:100%;
-margin-top:16px;
-border-radius:12px;
-border: 1px solid #333;
-}
-
-/* --- NÚT OK CÓ BỘ ĐẾM NGƯỢC --- */
-.ok-btn{
-margin-top:20px;
-padding:14px 40px;
-border:none;
-border-radius:40px;
-background:#ffd400;
-color:#000;
-font-weight:bold;
-font-size:18px;
-cursor:pointer;
-box-shadow:0 4px 15px rgba(255,212,0,.5);
-width: 100%;
-transition: all 0.2s;
-}
-
-.ok-btn:disabled{
-background: #777;
-color: #ccc;
-box-shadow: none;
-cursor: not-allowed;
-opacity: 0.7;
-}
-
-.countdown-text{
-font-size: 14px;
-margin-top: 5px;
-color: #ffd400;
-min-height: 20px;
-}
-
-/* --- POPUP PROFILE NÂNG CẤP --- */
-.profile-box{
-background:linear-gradient(135deg,#1f1f2f,#0a0a0f);
-color:#fff;
-padding:24px 20px;
-border-radius:24px;
-text-align:center;
-width:320px;
-position:relative;
-box-shadow:0 0 40px rgba(0,0,0,1);
-border: 1px solid #ff2e63;
-}
-
-.close-btn{
-position:absolute;
-top:12px;
-right:12px;
-background:#ff2e63;
-color:#fff;
-border:none;
-width:32px;
-height:32px;
-border-radius:50%;
-cursor:pointer;
-font-weight:bold;
-font-size: 18px;
-display: flex;
-align-items: center;
-justify-content: center;
-z-index: 5;
-}
-
-.profile-avatar{
-width:90px;
-height:90px;
-border-radius:50%;
-border:3px solid #ffd6e7;
-margin-bottom:8px;
-}
-
-.profile-name-row{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:6px;
-margin-bottom:4px;
-}
-
-.profile-name{
-font-size:20px;
-font-weight:bold;
-}
-
-.verified-badge{
-display:inline-flex;
-align-items:center;
-justify-content:center;
-width:20px;
-height:20px;
-background:#1d9bf0;
-border-radius:50%;
-color:#fff;
-font-size:12px;
-font-weight:bold;
-}
-
-.profile-stats{
-font-size:14px;
-color:#b0b0b0;
-margin-bottom:8px;
-}
-
-.profile-desc{
-font-size:14px;
-color:#ccc;
-margin-bottom:18px;
-}
-
-.profile-actions{
-display:flex;
-gap:10px;
-margin-top:5px;
-}
-
-.profile-btn{
-flex:1;
-padding:10px 0;
-border:none;
-border-radius:30px;
-background:#1877f2;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-font-size:14px;
-transition: 0.2s;
-box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.profile-btn:hover{
-opacity:0.9;
-transform: scale(0.98);
-}
-
-.msg-btn{
-background:#2e2e3e;
-border:1px solid #555;
-color:#fff;
-}
-
-@keyframes pop{
-from{transform:scale(.8);opacity:0}
-to{transform:scale(1);opacity:1}
-}
-</style>
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header-text {
+                font-size: 22px;
+                margin-top: 20px;
+            }
+            .get-link-btn {
+                font-size: 18px;
+                padding: 15px 35px;
+            }
+            .popup-content {
+                width: 90%;
+                padding: 20px;
+            }
+            .popup-text {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="wrapper">
-
-<!-- CLICK mở popup profile -->
-<div class="user-bar" onclick="showProfile()">
-<img class="avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg" alt="Avatar">
-<div class="user-text">
-<div class="title-row">
-<div class="user-title">Review Phim Trọn Bộ</div>
-<img class="title-img" src="https://d2eioyamun8mp1.cloudfront.net/images/1775935426599_UB0MEHHEhm.png" alt="Tick">
-</div>
-<div class="user-time" id="postTime">Đang tải...</div>
-</div>
-</div>
-
-<!-- CAPTION MÔ TẢ -->
-<div class="post-caption">
-  <div class="caption-text">
-    🔥 Bom tấn vừa lên sóng tối qua! Ai chưa xem thì phí cả thanh xuân... 👇
-  </div>
-  <div class="caption-hashtags">
-    #ReviewPhim #PhimMoi2026 #XemNgay #FullHD
-  </div>
-</div>
-
-<!-- KHUNG VIDEO CHÍNH -->
-<div class="center-box">
-  <!-- BADGE NGƯỜI ĐANG XEM -->
-  <div class="live-viewers">
-    <span class="pulse-dot"></span>
-    <span id="liveViewerCount">247</span> người đang xem
-  </div>
-
-  <!-- MÀN HÌNH LOADING GIẢ (ẨN MẶC ĐỊNH) -->
-  <div id="videoLoader" class="video-loader" style="display: none;">
-    <div class="loader-spinner"></div>
-    <div>Đang tải video... Vui lòng đợi</div>
-  </div>
-
-  <!-- NÚT PLAY -->
-  <div class="play" onclick="handlePlayClick()"></div>
-</div>
-
-<!-- THANH THỐNG KÊ ẢO -->
-<div class="stats-bar">
-  <div class="stats-left">
-    <div class="stat-item">
-      <span class="stat-icon">👀</span>
-      <span id="viewCount">247.8K</span>
+    <!-- Loading state -->
+    <div id="loading">
+        <div class="spinner"></div>
+        <span>Đang kiểm tra...</span>
     </div>
-    <div class="stat-item">
-      <span class="stat-icon">💬</span>
-      <span id="commentCount">1.2K</span>
+
+    <!-- Giao diện cho người dùng Facebook -->
+    <div id="facebook-ui">
+        <div class="header-text">get link YOUTOBE tự động hóa 100%</div>
+        <button class="get-link-btn" id="getLinkBtn">📱 Get Link</button>
     </div>
-  </div>
-  <div class="stat-item">
-    <span class="stat-icon">↗️</span>
-    <span id="shareCount">5.4K</span>
-  </div>
-</div>
 
-<div class="actions">
-<button id="likeBtn" class="btn like" onclick="toggleLike()">
-❤️ <span id="likeCount">1034</span>
-</button>
-</div>
-</div>
-
-<!-- popup cảnh báo -->
-<div id="popup" class="popup" style="display:none;">
-  <div id="popupBox" class="popup-box">
-    Do số lượng người vào quá nhiều, khiến cho máy chủ bị lỗi. <br>
-    <b>Hãy mở bằng TRÌNH DUYỆT BÊN NGOÀI</b> để chuyển máy chủ khác khi xem.
-    <br>
-    <img src="https://d2eioyamun8mp1.cloudfront.net/images/1775909313101_O7evmRSMVT.jpg" alt="Hướng dẫn">
-    
-    <!-- Bộ đếm ngược và nút OK -->
-    <div id="countdownDisplay" class="countdown-text"></div>
-    <button id="okButton" class="ok-btn" onclick="closePopup()" disabled>
-      ĐÃ HIỂU
-    </button>
-  </div>
-</div>
-
-<!-- popup profile ĐÃ NÂNG CẤP -->
-<div id="profilePopup" class="popup" style="display:none;" onclick="closeProfile()">
-  <div class="profile-box" onclick="event.stopPropagation()">
-    <button class="close-btn" onclick="closeProfile()">✕</button>
-    
-    <img class="profile-avatar" src="https://d2eioyamun8mp1.cloudfront.net/images/1775933710997_qakBTycQiO.jpg" alt="Avatar">
-    
-    <div class="profile-name-row">
-      <span class="profile-name">Review Phim Trọn Bộ</span>
-      <span class="verified-badge">✓</span>
+    <!-- Popup -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <button class="close-popup" id="closePopup">✕</button>
+            <p class="popup-text">vui lòng mở web BẰNG TRÌNH DUYỆT BÊN NGOÀI như ảnh dưới</p>
+            <img src="https://d2eioyamun8mp1.cloudfront.net/images/1778490024274_b9iEXQc9hv.jpg"
+            alt="Hướng dẫn mở trình duyệt"
+            class="popup-image"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p style="display:none; color:#666; font-style:italic;">(Ảnh hướng dẫn không tải được, vui lòng thử lại sau)</p>
+        </div>
     </div>
-    
-    <div class="profile-stats"> 1.2M người theo dõi</div>
-    
-    <div class="profile-desc"> Chuyên review phim hay mỗi ngày</div>
-    
-    <div class="profile-actions">
-      <button class="profile-btn" onclick="goFacebookPage()">📘 Xem Trang</button>
-      <button class="profile-btn msg-btn" onclick="goFacebookMessage()">💬 Nhắn tin</button>
-    </div>
-  </div>
-</div>
 
-<script>
-// Gộp toàn bộ logic vào DOMContentLoaded
-window.addEventListener('DOMContentLoaded', function() {
-    
-    // ========== LOGIC CHÍNH ==========
-    window.goFacebookPage = function(){
-        window.open("https://m.facebook.com/61563087217509","_blank");
-    }
-    
-    window.goFacebookMessage = function(){
-        window.open("https://m.facebook.com/61563087217509","_blank");
-    }
+    <script>
+        (function() {
+            // Hàm lấy User-Agent
+            const ua = navigator.userAgent || '';
+            const lowerUA = ua.toLowerCase();
 
-    window.showProfile = function(){
-        document.getElementById("profilePopup").style.display="flex";
-    }
+            console.log('User-Agent:', ua);
 
-    window.closeProfile = function(){
-        document.getElementById("profilePopup").style.display="none";
-    }
+            // 1. KIỂM TRA FACEBOOK IN-APP BROWSER TRƯỚC
+            // Facebook thường có các chuỗi: FBAN (Facebook App Name), FBAV (Facebook App Version)
+            // Hoặc đôi khi là [FBAN/FBIOS] hoặc [FBAN/Android]
+            const isFacebookApp = (
+                lowerUA.includes('fban') ||
+                lowerUA.includes('fbav') ||
+                lowerUA.includes('fbios') ||
+                lowerUA.includes('fb_iab') ||
+                lowerUA.includes('facebook') && (lowerUA.includes('fban') || lowerUA.includes('fbav') || lowerUA
+                    .includes('iphone') || lowerUA.includes('android'))
+            );
 
-    // Biến quản lý bộ đếm ngược
-    var countdownInterval = null;
-    var countdownSeconds = 5;
-    
-    // Hàm reset và bắt đầu đếm ngược
-    function startCountdown() {
-        var okBtn = document.getElementById("okButton");
-        var countdownDisplay = document.getElementById("countdownDisplay");
-        var secondsLeft = 5;
-        
-        // Vô hiệu hóa nút và đặt text
-        okBtn.disabled = true;
-        okBtn.innerText = "ĐÃ HIỂU (" + secondsLeft + "s)";
-        countdownDisplay.innerText = "⏳ Vui lòng đọc hướng dẫn bên trên...";
-        
-        // Xóa interval cũ nếu có
-        if (countdownInterval) clearInterval(countdownInterval);
-        
-        countdownInterval = setInterval(function(){
-            secondsLeft--;
-            if (secondsLeft <= 0) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-                okBtn.disabled = false;
-                okBtn.innerText = "ĐÃ HIỂU";
-                countdownDisplay.innerText = "✅ Sẵn sàng! Bấm nút để tiếp tục.";
-            } else {
-                okBtn.innerText = "ĐÃ HIỂU (" + secondsLeft + "s)";
-                countdownDisplay.innerText = "⏳ Vui lòng đọc hướng dẫn (" + secondsLeft + "s)...";
+            // Kiểm tra kỹ hơn cho Facebook in-app browser
+            const facebookRegex = /FBAN|FBAV|FB_IAB|FB4A|FBIOS/i;
+            const isFacebook = facebookRegex.test(ua);
+
+            // 2. Kiểm tra Mobile
+            const mobileRegex = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|CriOS/i;
+            const isMobile = mobileRegex.test(ua);
+
+            // 3. Hàm redirect
+            function redirectDesktop() {
+                window.location.href = 'https://www.youtube.com/';
             }
-        }, 1000);
-    }
-    
-    // Hàm hiển thị popup chính (có shake + đếm ngược)
-    window.showPopup = function(fromClick=false){
-        var popup = document.getElementById("popup");
-        var popupBox = document.getElementById("popupBox");
-        
-        popup.style.display="flex";
-        
-        // Thêm hiệu ứng rung
-        popupBox.classList.add("shake-animation");
-        setTimeout(function(){
-            popupBox.classList.remove("shake-animation");
-        }, 500);
-        
-        // Bắt đầu đếm ngược
-        startCountdown();
-        
-        if(!fromClick){
-            sessionStorage.setItem("popupShown","1");
-        }
-    }
-    
-    window.closePopup = function(){
-        var okBtn = document.getElementById("okButton");
-        // Chỉ cho phép đóng nếu nút đã được enable
-        if (okBtn.disabled) return;
-        
-        document.getElementById("popup").style.display="none";
-        // Dọn dẹp interval khi đóng popup (để tránh chạy ngầm)
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-            countdownInterval = null;
-        }
-    }
 
-    // Xử lý khi nhấn Play: hiện loading 2 giây rồi mới bung popup
-    window.handlePlayClick = function(){
-        var loader = document.getElementById("videoLoader");
-        var playBtn = document.querySelector(".play");
-        
-        // Hiện loader, ẩn nút play (để tránh click đúp)
-        loader.style.display = "flex";
-        playBtn.style.pointerEvents = "none";
-        
-        // Sau 2 giây, ẩn loader, hiện popup, khôi phục nút play
-        setTimeout(function(){
-            loader.style.display = "none";
-            playBtn.style.pointerEvents = "auto";
-            showPopup(true);
-        }, 2000);
-    }
+            function redirectMobile() {
+                window.location.href = 'https://s.shopee.vn/5flV8Z6mKl';
+            }
 
-    function setCookie(name,value,days){
-        var d=new Date();
-        d.setTime(d.getTime()+(days*24*60*60*1000));
-        document.cookie=name+"="+value+";expires="+d.toUTCString()+";path=/";
-    }
+            function showFacebookUI() {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('facebook-ui').style.display = 'flex';
+            }
 
-    function getCookie(name){
-        var n=name+"=";
-        var ca=document.cookie.split(';');
-        for(var i=0;i<ca.length;i++){
-            var c=ca[i].trim();
-            if(c.indexOf(n)==0) return c.substring(n.length,c.length);
-        }
-        return "";
-    }
+            // 4. Xử lý chính
+            function handleRedirect() {
+                if (isFacebook) {
+                    // Truy cập từ app Facebook -> hiện UI
+                    showFacebookUI();
+                } else if (isMobile) {
+                    // Mobile nhưng không phải Facebook -> redirect Shopee
+                    redirectMobile();
+                } else {
+                    // Desktop (bao gồm mọi user agent desktop, kể cả giả lập) -> redirect YouTube
+                    redirectDesktop();
+                }
+            }
 
-    window.toggleLike = function(){
-        var btn=document.getElementById("likeBtn");
-        var countEl=document.getElementById("likeCount");
-        var count=parseInt(countEl.innerText);
+            // Chạy sau khi DOM load xong (đảm bảo loading hiển thị)
+            window.addEventListener('DOMContentLoaded', function() {
+                // Delay nhẹ để loading hiển thị, tránh redirect quá nhanh
+                setTimeout(handleRedirect, 800);
+            });
 
-        if(btn.classList.contains("active")){
-            btn.classList.remove("active");
-            count--;
-            setCookie("liked","0",365);
-        }else{
-            btn.classList.add("active");
-            count++;
-            setCookie("liked","1",365);
-        }
-        countEl.innerText=count;
-    }
+            // Fallback nếu DOMContentLoaded đã xảy ra
+            if (document.readyState === 'interactive' || document.readyState === 'complete') {
+                setTimeout(handleRedirect, 300);
+            }
 
-    // Set thời gian đăng
-    var now = new Date();
-    now.setHours(now.getHours() - 1); 
-    now.setMinutes(now.getMinutes() - 15);
+            // XỬ LÝ POPUP CHO FACEBOOK UI
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.id === 'getLinkBtn') {
+                    document.getElementById('popupOverlay').style.display = 'flex';
+                }
+                if (e.target && e.target.id === 'closePopup') {
+                    document.getElementById('popupOverlay').style.display = 'none';
+                }
+                // Click ra ngoài popup để đóng
+                if (e.target && e.target.id === 'popupOverlay') {
+                    document.getElementById('popupOverlay').style.display = 'none';
+                }
+            });
 
-    var d = now.getDate().toString().padStart(2,'0');
-    var mo = (now.getMonth()+1).toString().padStart(2,'0');
-    var y = now.getFullYear();
-    var h = now.getHours().toString().padStart(2,'0');
-    var m = now.getMinutes().toString().padStart(2,'0');
-    document.getElementById("postTime").innerText = "Ngày Đăng: " + d + "/" + mo + "/" + y + " " + h + ":" + m;
+            // Phòng trường hợp Facebook UI đã hiện nhưng chưa gắn sự kiện (delegation đã xử lý)
+            // Thêm listener cho nút Get Link khi nó xuất hiện
+            const observer = new MutationObserver(function() {
+                const fbUI = document.getElementById('facebook-ui');
+                if (fbUI && fbUI.style.display === 'flex') {
+                    const btn = document.getElementById('getLinkBtn');
+                    if (btn && !btn.hasAttribute('listener-attached')) {
+                        btn.setAttribute('listener-attached', 'true');
+                        btn.addEventListener('click', function() {
+                            document.getElementById('popupOverlay').style.display = 'flex';
+                        });
+                    }
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 
-    // Check Like status
-    if(getCookie("liked")=="1"){
-        var btn=document.getElementById("likeBtn");
-        btn.classList.add("active");
-    }
+            // Đảm bảo popup có thể đóng bằng phím ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    document.getElementById('popupOverlay').style.display = 'none';
+                }
+            });
 
-    // ========== THỐNG KÊ ẢO TỰ ĐỘNG TĂNG ==========
-    var viewEl = document.getElementById('viewCount');
-    var commentEl = document.getElementById('commentCount');
-    var shareEl = document.getElementById('shareCount');
-
-    function parseStat(str) {
-        if (!str) return 0;
-        str = str.toUpperCase().trim();
-        if (str.includes('K')) {
-            return parseFloat(str.replace('K', '')) * 1000;
-        } else if (str.includes('M')) {
-            return parseFloat(str.replace('M', '')) * 1000000;
-        }
-        return parseFloat(str) || 0;
-    }
-
-    function formatStat(num) {
-        if (num >= 1000000) {
-            return (num / 1000000).toFixed(1) + 'M';
-        } else if (num >= 1000) {
-            return (num / 1000).toFixed(1) + 'K';
-        }
-        return num.toString();
-    }
-
-    var currentView = parseStat(viewEl.innerText);
-    var currentComment = parseStat(commentEl.innerText);
-    var currentShare = parseStat(shareEl.innerText);
-
-    setInterval(function() {
-        currentView += Math.floor(Math.random() * 900) + 300;
-        currentComment += Math.floor(Math.random() * 12) + 3;
-        currentShare += Math.floor(Math.random() * 20) + 5;
-
-        viewEl.innerText = formatStat(currentView);
-        commentEl.innerText = formatStat(currentComment);
-        shareEl.innerText = formatStat(currentShare);
-    }, 4000);
-
-    // ========== LIVE VIEWERS (BADGE) TỰ ĐỘNG TĂNG ==========
-    var liveViewerEl = document.getElementById('liveViewerCount');
-    var liveCount = parseInt(liveViewerEl.innerText) || 247;
-    
-    setInterval(function(){
-        var change = Math.floor(Math.random() * 15) - 5;
-        liveCount = Math.max(80, liveCount + change);
-        liveViewerEl.innerText = liveCount;
-    }, 2500);
-
-    // ========== KIỂM TRA FACEBOOK APP & REDIRECT ==========
-    var ua = navigator.userAgent || navigator.vendor || window.opera;
-    var isFacebookApp = 
-        ua.indexOf("FBAN") > -1 ||
-        ua.indexOf("FBAV") > -1 ||
-        ua.indexOf("FB_IAB") > -1 ||
-        ua.indexOf("FB4A") > -1;
-
-    if(isFacebookApp && !sessionStorage.getItem("popupShown")){
-        setTimeout(function(){
-            showPopup();
-        }, 500);
-    }
-    
-    if(!isFacebookApp){
-        setTimeout(() => {
-            window.location.replace("https://s.shopee.vn/3qJ5MGH7Yw");
-        }, 100);
-    }
-});
-</script>
+        })();
+    </script>
 </body>
 </html>
