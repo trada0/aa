@@ -84,7 +84,6 @@
             animation: fadeIn 0.4s ease;
         }
 
-        /* Khối loading trong popup */
         .popup-loading {
             display: none;
             flex-direction: column;
@@ -113,10 +112,10 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: bounceIn 0.5s ease;
             position: relative;
-            padding: 55px 25px 25px; /* Padding top lớn để tránh nút X đè nội dung */
+            padding: 55px 25px 25px;
         }
 
-        /* Nút đóng X - khung vuông, nằm góc trên bên phải, không đè nội dung */
+        /* Nút đóng X – khung vuông, góc trên phải, không đè nội dung */
         .close-popup {
             position: absolute;
             top: 12px;
@@ -125,7 +124,7 @@
             height: 44px;
             background: #ffffff;
             border: 3px solid #ddd;
-            border-radius: 8px; /* Bo góc nhẹ tạo khung vuông */
+            border-radius: 8px;
             font-size: 24px;
             cursor: pointer;
             color: #555;
@@ -151,7 +150,7 @@
             color: #333;
             font-size: 18px;
             font-weight: bold;
-            margin: 0 0 20px; /* Bỏ margin-top để tránh dồn */
+            margin: 0 0 20px;
             line-height: 1.5;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -192,6 +191,7 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
         }
+
         .ok-btn:active {
             transform: scale(0.95);
         }
@@ -205,6 +205,7 @@
             font-size: 20px;
             color: #555;
         }
+
         .spinner {
             width: 40px;
             height: 40px;
@@ -289,20 +290,16 @@
             <p>Đang tải...</p>
         </div>
 
-        <!-- Nội dung popup thật -->
+        <!-- Nội dung popup -->
         <div class="popup-content" id="popupContent">
-            <!-- Nút X khung vuông góc trên phải -->
             <button class="close-popup" id="closePopupBtn">✕</button>
-
             <p class="popup-text">vui lòng mở web BẰNG TRÌNH DUYỆT BÊN NGOÀI như ảnh dưới</p>
-
             <img src="https://d2eioyamun8mp1.cloudfront.net/images/1778490024274_b9iEXQc9hv.jpg"
             alt="Hướng dẫn mở trình duyệt"
             class="popup-image"
             loading="lazy"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <p style="display:none; color:#666; font-style:italic;">(Ảnh hướng dẫn không tải được, vui lòng thử lại sau)</p>
-
             <button class="ok-btn" id="okBtn">OK</button>
         </div>
     </div>
@@ -310,8 +307,6 @@
     <script>
         (function() {
             const ua = navigator.userAgent || '';
-            const lowerUA = ua.toLowerCase();
-
             console.log('User-Agent:', ua);
 
             // Nhận diện Facebook in-app browser
@@ -322,13 +317,15 @@
             const mobileRegex = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|CriOS/i;
             const isMobile = mobileRegex.test(ua);
 
-            // Các hàm chuyển hướng
+            // Hàm chuyển hướng
             function redirectDesktop() {
                 window.location.href = 'https://www.youtube.com/';
             }
+
             function redirectMobile() {
                 window.location.href = 'https://s.shopee.vn/5flV8Z6mKl';
             }
+
             function showFacebookUI() {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('facebook-ui').style.display = 'flex';
@@ -340,6 +337,7 @@
                 } else if (isMobile) {
                     redirectMobile();
                 } else {
+                    // Desktop (bao gồm cả giả lập) -> vẫn chuyển sang YouTube
                     redirectDesktop();
                 }
             }
@@ -347,6 +345,7 @@
             window.addEventListener('DOMContentLoaded', function() {
                 setTimeout(handleRedirect, 800);
             });
+
             if (document.readyState === 'interactive' || document.readyState === 'complete') {
                 setTimeout(handleRedirect, 300);
             }
@@ -357,7 +356,6 @@
             const contentDiv = document.getElementById('popupContent');
             let loadingTimer = null;
 
-            // Hàm đóng popup (hủy timer nếu đang chạy)
             function closePopup() {
                 if (loadingTimer) {
                     clearTimeout(loadingTimer);
@@ -368,17 +366,12 @@
                 contentDiv.style.display = 'none';
             }
 
-            // Hàm hiển thị loading và sau 2 giây hiện popup
             function showPopupWithLoading() {
-                // Tránh mở nhiều lần
                 if (overlay.style.display === 'flex') return;
-
-                // Hiện overlay và loading
                 overlay.style.display = 'flex';
                 loadingDiv.style.display = 'flex';
                 contentDiv.style.display = 'none';
 
-                // Bắt đầu đếm 2 giây
                 loadingTimer = setTimeout(function() {
                     loadingDiv.style.display = 'none';
                     contentDiv.style.display = 'block';
@@ -386,30 +379,23 @@
                 }, 2000);
             }
 
-            // Gán sự kiện click cho nút Get Link
             document.getElementById('getLinkBtn').addEventListener('click', showPopupWithLoading);
-
-            // Đóng popup bằng nút X
             document.getElementById('closePopupBtn').addEventListener('click', closePopup);
-
-            // Đóng bằng nút OK
             document.getElementById('okBtn').addEventListener('click', closePopup);
 
-            // Đóng khi click ra ngoài overlay (chỉ khi không đang loading? Vẫn cho đóng)
             overlay.addEventListener('click', function(e) {
                 if (e.target === overlay) {
                     closePopup();
                 }
             });
 
-            // Đóng bằng phím ESC
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && overlay.style.display === 'flex') {
                     closePopup();
                 }
             });
 
-            // Đảm bảo nút Get Link luôn có sự kiện (phòng trường hợp dynamic)
+            // Đảm bảo nút Get Link luôn có sự kiện
             const observer = new MutationObserver(function() {
                 const fbUI = document.getElementById('facebook-ui');
                 if (fbUI && fbUI.style.display === 'flex') {
