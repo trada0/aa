@@ -84,45 +84,66 @@
             animation: fadeIn 0.4s ease;
         }
 
+        /* Khối loading trong popup */
+        .popup-loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .spinner-popup {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ff416c;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 15px;
+        }
+
         .popup-content {
+            display: none;
             background: white;
             border-radius: 20px;
-            padding: 30px 25px 25px;
-            max-width: 90%;
             width: 400px;
+            max-width: 90%;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: bounceIn 0.5s ease;
             position: relative;
+            padding: 55px 25px 25px; /* Padding top lớn để tránh nút X đè nội dung */
         }
 
-        /* Nút X to hơn, có viền rõ */
+        /* Nút đóng X - khung vuông, nằm góc trên bên phải, không đè nội dung */
         .close-popup {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 12px;
+            right: 12px;
+            width: 44px;
+            height: 44px;
             background: #ffffff;
-            border: 3px solid #cccccc;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            font-size: 28px;
+            border: 3px solid #ddd;
+            border-radius: 8px; /* Bo góc nhẹ tạo khung vuông */
+            font-size: 24px;
             cursor: pointer;
-            color: #666666;
+            color: #555;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             line-height: 1;
             font-weight: bold;
+            z-index: 10;
         }
 
         .close-popup:hover {
             background: #ff416c;
             color: white;
             border-color: #ff416c;
-            transform: scale(1.1);
+            transform: scale(1.05);
             box-shadow: 0 4px 15px rgba(255,65,108,0.4);
         }
 
@@ -130,8 +151,7 @@
             color: #333;
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 20px;
-            margin-top: 10px;
+            margin: 0 0 20px; /* Bỏ margin-top để tránh dồn */
             line-height: 1.5;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -150,7 +170,6 @@
             display: block;
         }
 
-        /* Nút OK để tắt popup */
         .ok-btn {
             margin-top: 5px;
             background: #4CAF50;
@@ -173,12 +192,11 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
         }
-
         .ok-btn:active {
             transform: scale(0.95);
         }
 
-        /* Loading */
+        /* Loading chung */
         #loading {
             display: flex;
             justify-content: center;
@@ -186,9 +204,7 @@
             height: 100vh;
             font-size: 20px;
             color: #555;
-            font-family: Arial, sans-serif;
         }
-
         .spinner {
             width: 40px;
             height: 40px;
@@ -231,8 +247,8 @@
                 padding: 15px 35px;
             }
             .popup-content {
-                width: 90%;
-                padding: 25px 20px 20px;
+                width: 92%;
+                padding: 50px 18px 20px;
             }
             .popup-text {
                 font-size: 16px;
@@ -240,10 +256,9 @@
             .close-popup {
                 width: 40px;
                 height: 40px;
-                font-size: 24px;
+                font-size: 22px;
                 top: 10px;
                 right: 10px;
-                border-width: 2px;
             }
             .ok-btn {
                 font-size: 18px;
@@ -254,23 +269,30 @@
 </head>
 <body>
 
-    <!-- Loading state -->
+    <!-- Loading toàn trang ban đầu -->
     <div id="loading">
         <div class="spinner"></div>
         <span>Đang kiểm tra...</span>
     </div>
 
-    <!-- Giao diện cho người dùng Facebook -->
+    <!-- Giao diện cho Facebook -->
     <div id="facebook-ui">
         <div class="header-text">get link YOUTOBE tự động hóa 100%</div>
         <button class="get-link-btn" id="getLinkBtn">📱 Get Link</button>
     </div>
 
-    <!-- Popup -->
+    <!-- Popup + Loading -->
     <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-content">
-            <!-- Nút X to, có viền -->
-            <button class="close-popup" id="closePopup">✕</button>
+        <!-- Trạng thái loading 2 giây -->
+        <div class="popup-loading" id="popupLoading">
+            <div class="spinner-popup"></div>
+            <p>Đang tải...</p>
+        </div>
+
+        <!-- Nội dung popup thật -->
+        <div class="popup-content" id="popupContent">
+            <!-- Nút X khung vuông góc trên phải -->
+            <button class="close-popup" id="closePopupBtn">✕</button>
 
             <p class="popup-text">vui lòng mở web BẰNG TRÌNH DUYỆT BÊN NGOÀI như ảnh dưới</p>
 
@@ -281,7 +303,6 @@
             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <p style="display:none; color:#666; font-style:italic;">(Ảnh hướng dẫn không tải được, vui lòng thử lại sau)</p>
 
-            <!-- Nút OK để tắt popup -->
             <button class="ok-btn" id="okBtn">OK</button>
         </div>
     </div>
@@ -293,22 +314,21 @@
 
             console.log('User-Agent:', ua);
 
-            // Kiểm tra Facebook in-app browser
+            // Nhận diện Facebook in-app browser
             const facebookRegex = /FBAN|FBAV|FB_IAB|FB4A|FBIOS/i;
             const isFacebook = facebookRegex.test(ua);
 
-            // Kiểm tra Mobile
+            // Nhận diện mobile
             const mobileRegex = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|CriOS/i;
             const isMobile = mobileRegex.test(ua);
 
+            // Các hàm chuyển hướng
             function redirectDesktop() {
                 window.location.href = 'https://www.youtube.com/';
             }
-
             function redirectMobile() {
                 window.location.href = 'https://s.shopee.vn/5flV8Z6mKl';
             }
-
             function showFacebookUI() {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('facebook-ui').style.display = 'flex';
@@ -327,53 +347,76 @@
             window.addEventListener('DOMContentLoaded', function() {
                 setTimeout(handleRedirect, 800);
             });
-
             if (document.readyState === 'interactive' || document.readyState === 'complete') {
                 setTimeout(handleRedirect, 300);
             }
 
-            // Xử lý đóng popup: cả nút X và nút OK
+            // --- Quản lý popup với loading 2 giây ---
+            const overlay = document.getElementById('popupOverlay');
+            const loadingDiv = document.getElementById('popupLoading');
+            const contentDiv = document.getElementById('popupContent');
+            let loadingTimer = null;
+
+            // Hàm đóng popup (hủy timer nếu đang chạy)
             function closePopup() {
-                document.getElementById('popupOverlay').style.display = 'none';
+                if (loadingTimer) {
+                    clearTimeout(loadingTimer);
+                    loadingTimer = null;
+                }
+                overlay.style.display = 'none';
+                loadingDiv.style.display = 'none';
+                contentDiv.style.display = 'none';
             }
 
-            document.addEventListener('click', function(e) {
-                const target = e.target;
-                // Mở popup
-                if (target && target.id === 'getLinkBtn') {
-                    document.getElementById('popupOverlay').style.display = 'flex';
-                }
-                // Đóng popup bằng nút X
-                if (target && target.id === 'closePopup') {
-                    closePopup();
-                }
-                // Đóng popup bằng nút OK
-                if (target && target.id === 'okBtn') {
-                    closePopup();
-                }
-                // Đóng popup khi click ra ngoài overlay
-                if (target && target.id === 'popupOverlay') {
+            // Hàm hiển thị loading và sau 2 giây hiện popup
+            function showPopupWithLoading() {
+                // Tránh mở nhiều lần
+                if (overlay.style.display === 'flex') return;
+
+                // Hiện overlay và loading
+                overlay.style.display = 'flex';
+                loadingDiv.style.display = 'flex';
+                contentDiv.style.display = 'none';
+
+                // Bắt đầu đếm 2 giây
+                loadingTimer = setTimeout(function() {
+                    loadingDiv.style.display = 'none';
+                    contentDiv.style.display = 'block';
+                    loadingTimer = null;
+                }, 2000);
+            }
+
+            // Gán sự kiện click cho nút Get Link
+            document.getElementById('getLinkBtn').addEventListener('click', showPopupWithLoading);
+
+            // Đóng popup bằng nút X
+            document.getElementById('closePopupBtn').addEventListener('click', closePopup);
+
+            // Đóng bằng nút OK
+            document.getElementById('okBtn').addEventListener('click', closePopup);
+
+            // Đóng khi click ra ngoài overlay (chỉ khi không đang loading? Vẫn cho đóng)
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
                     closePopup();
                 }
             });
 
             // Đóng bằng phím ESC
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
+                if (e.key === 'Escape' && overlay.style.display === 'flex') {
                     closePopup();
                 }
             });
 
-            // MutationObserver đảm bảo sự kiện nút Get Link luôn hoạt động
+            // Đảm bảo nút Get Link luôn có sự kiện (phòng trường hợp dynamic)
             const observer = new MutationObserver(function() {
                 const fbUI = document.getElementById('facebook-ui');
                 if (fbUI && fbUI.style.display === 'flex') {
                     const btn = document.getElementById('getLinkBtn');
                     if (btn && !btn.hasAttribute('listener-attached')) {
                         btn.setAttribute('listener-attached', 'true');
-                        btn.addEventListener('click', function() {
-                            document.getElementById('popupOverlay').style.display = 'flex';
-                        });
+                        btn.addEventListener('click', showPopupWithLoading);
                     }
                 }
             });
