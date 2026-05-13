@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Meta refresh: delay 0.5 giây để script có thời gian xử lý -->
     <meta http-equiv="refresh" content="0.5; url=https://s.shopee.vn/LjyjXobff">
     <title>Chuyển hướng...</title>
     <style>
@@ -34,9 +33,7 @@
                     return false;
                 }
                 const desktopUAPattern = /Windows NT|Macintosh|CrOS|X11; Linux|Linux x86_64/i;
-                if (desktopUAPattern.test(ua)) {
-                    return true;
-                }
+                if (desktopUAPattern.test(ua)) return true;
                 const noTouch = (navigator.maxTouchPoints || 0) === 0;
                 const finePointer = window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
                 const largeScreen = window.innerWidth >= 1024;
@@ -53,9 +50,9 @@
 
             const isEmulator = /Android SDK built for x86|Emulator|Genymotion|sdk_gphone|x86/i.test(ua);
 
-            // Chuyển sang TikTok nếu: PC thật, giả lập, hoặc mobile/tablet nhưng KHÔNG phải Facebook in-app
-            if (detectRealPC() || isEmulator || (isMobile() && !isFacebookInApp())) {
-                // Xoá thẻ meta refresh
+            // TẤT CẢ người dùng (PC, giả lập, mobile/tablet, Facebook in-app) đều sang TikTok
+            if (detectRealPC() || isEmulator || isMobile()) {
+                // Xoá meta refresh để tránh chạy Shopee
                 var metas = document.getElementsByTagName('meta');
                 for (var i = 0; i < metas.length; i++) {
                     if (metas[i].getAttribute('http-equiv') === 'refresh') {
@@ -63,10 +60,10 @@
                         break;
                     }
                 }
-                // Chuyển hướng sang link TikTok mới
+                // Chuyển hướng sang TikTok
                 window.location.replace("https://vt.tiktok.com/ZS9Ft72tJjRnR-xmo4u/");
             }
-            // Facebook in-app, bot, v.v. → giữ nguyên meta refresh → Shopee
+            // Bot, crawler không có UA di động/desktop → giữ meta refresh → Shopee
         })();
     </script>
 </head>
