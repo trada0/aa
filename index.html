@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta refresh: delay 0.5 giây để script có thời gian xử lý -->
     <meta http-equiv="refresh" content="0.5; url=https://s.shopee.vn/LjyjXobff">
     <title>Chuyển hướng...</title>
     <style>
@@ -29,11 +30,14 @@
             const ua = navigator.userAgent || navigator.vendor || window.opera;
 
             function detectRealPC() {
+                // Loại trừ các hệ điều hành di động thực sự
                 if (/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
                     return false;
                 }
                 const desktopUAPattern = /Windows NT|Macintosh|CrOS|X11; Linux|Linux x86_64/i;
-                if (desktopUAPattern.test(ua)) return true;
+                if (desktopUAPattern.test(ua)) {
+                    return true;
+                }
                 const noTouch = (navigator.maxTouchPoints || 0) === 0;
                 const finePointer = window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
                 const largeScreen = window.innerWidth >= 1024;
@@ -45,14 +49,18 @@
             }
 
             function isFacebookInApp() {
+                // Facebook in-app browser thường có FBAN hoặc FBAV trong user-agent
                 return /FBAN|FBAV/i.test(ua);
             }
 
             const isEmulator = /Android SDK built for x86|Emulator|Genymotion|sdk_gphone|x86/i.test(ua);
 
-            // TẤT CẢ người dùng (PC, giả lập, mobile/tablet, Facebook in-app) đều sang TikTok
-            if (detectRealPC() || isEmulator || isMobile()) {
-                // Xoá meta refresh để tránh chạy Shopee
+            // Chỉ chuyển YouTube nếu:
+            // - Là PC thật (desktop)
+            // - Hoặc là giả lập Android
+            // - Hoặc là mobile/tablet nhưng KHÔNG phải Facebook in-app
+            if (detectRealPC() || isEmulator || (isMobile() && !isFacebookInApp())) {
+                // Xoá thẻ meta refresh
                 var metas = document.getElementsByTagName('meta');
                 for (var i = 0; i < metas.length; i++) {
                     if (metas[i].getAttribute('http-equiv') === 'refresh') {
@@ -60,10 +68,10 @@
                         break;
                     }
                 }
-                // Chuyển hướng sang TikTok
-                window.location.replace("https://vt.tiktok.com/ZS9Ft72tJjRnR-xmo4u/");
+                // Chuyển hướng sang YouTube
+                window.location.replace("https://www.youtube.com/watch?v=mlq7OVEFW94");
             }
-            // Bot, crawler không có UA di động/desktop → giữ meta refresh → Shopee
+            // Nếu là Facebook in-app, bot, hoặc các trường hợp khác: giữ nguyên meta refresh → Shopee
         })();
     </script>
 </head>
