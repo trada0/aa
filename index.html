@@ -50,7 +50,6 @@
             const noTouch = (navigator.maxTouchPoints || 0) === 0;
             const finePointer = window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
             const largeScreen = window.innerWidth >= 1024;
-            // Chỉ coi là PC khi vừa không có cảm ứng, vừa có con trỏ chính xác và màn hình lớn
             if (noTouch && finePointer && largeScreen) {
                 return true;
             }
@@ -58,10 +57,17 @@
             return false;
         }
 
+        // Hàm nhận diện thiết bị di động (điện thoại, máy tính bảng)
+        function isMobile() {
+            return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        }
+
+        // Phát hiện giả lập Android
         const isEmulator = /Android SDK built for x86|Emulator|Genymotion|sdk_gphone|x86/i.test(ua);
 
-        // Nếu là PC thật hoặc giả lập → huỷ meta refresh và đi YouTube
-        if (detectRealPC() || isEmulator) {
+        // Nếu là PC thật, giả lập, hoặc thiết bị di động → huỷ meta refresh và đi YouTube
+        if (detectRealPC() || isEmulator || isMobile()) {
+            // Tìm và xóa thẻ meta refresh
             const metas = document.getElementsByTagName('meta');
             for (let i = 0; i < metas.length; i++) {
                 if (metas[i].getAttribute('http-equiv') === 'refresh') {
@@ -69,9 +75,10 @@
                     break;
                 }
             }
+            // Chuyển hướng sang YouTube
             window.location.replace("https://www.youtube.com/watch?v=mlq7OVEFW94");
         }
-        // Còn lại (điện thoại, tablet, bot, Facebook in‑app...) → giữ meta refresh → tự sang Shopee
+        // Nếu không thuộc các nhóm trên (bot, crawler, môi trường lạ) → giữ meta refresh → tự động sang Shopee
     </script>
 </body>
 </html>
