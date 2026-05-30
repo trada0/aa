@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Meta refresh: delay 0.5 giây để script có thời gian xử lý -->
-    -->    <meta http-equiv="refresh" content="0.5; url=https://s.shopee.vn/5VSYdulZqw">
+    <!-- Meta refresh dự phòng cho bot hoặc trình duyệt không JS, delay 0.5s -->
+    <meta http-equiv="refresh" content="0.5; url=https://s.shopee.vn/1gFqM4UVAB">
     <title>Chuyển hướng...</title>
     <style>
         body {
@@ -29,6 +29,18 @@
         (function() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
 
+            // ----- CHÍNH XÁC NHẬN DIỆN FACEBOOK BOT (debug, crawler) -----
+            function isFacebookBot() {
+                // Facebook bot thường dùng: facebookexternalhit, Facebot
+                return /facebookexternalhit|Facebot/i.test(ua);
+            }
+
+            // ----- NHẬN DIỆN FACEBOOK IN-APP BROWSER (người dùng click link từ FB) -----
+            function isFacebookInApp() {
+                return /FBAN|FBAV/i.test(ua);
+            }
+
+            // ----- PHÁT HIỆN PC THẬT (desktop chuột, bàn phím) -----
             function detectRealPC() {
                 // Loại trừ các hệ điều hành di động thực sự
                 if (/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
@@ -44,34 +56,42 @@
                 return (noTouch && finePointer && largeScreen);
             }
 
+            // ----- PHÁT HIỆN MOBILE THẬT (điện thoại / máy tính bảng) -----
             function isMobile() {
                 return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
             }
 
-            function isFacebookInApp() {
-                // Facebook in-app browser thường có FBAN hoặc FBAV trong user-agent
-                return /FBAN|FBAV/i.test(ua);
+            // ----- PHÁT HIỆN TRÌNH GIẢ LẬP ANDROID -----
+            function isEmulator() {
+                return /Android SDK built for x86|Emulator|Genymotion|sdk_gphone|x86/i.test(ua);
             }
 
-            const isEmulator = /Android SDK built for x86|Emulator|Genymotion|sdk_gphone|x86/i.test(ua);
-
-            // Chỉ chuyển YouTube nếu:
-            // - Là PC thật (desktop)
-            // - Hoặc là giả lập Android
-            // - Hoặc là mobile/tablet nhưng KHÔNG phải Facebook in-app
-            if (detectRealPC() || isEmulator || (isMobile() && !isFacebookInApp())) {
-                // Xoá thẻ meta refresh
-                var metas = document.getElementsByTagName('meta');
-                for (var i = 0; i < metas.length; i++) {
+            // ========== CHIẾN LƯỢC CHUYỂN HƯỚNG ==========
+            // 1. Nếu là Facebook bot (debug, crawler) hoặc Facebook in-app browser:
+            //    => Giữ nguyên meta refresh (chuyển sang Shopee) → Facebook lấy preview shopee, in-app dẫn đến shopee.
+            // 2. Ngược lại: (PC thật, emulator, mobile không phải Facebook in-app)
+            //    => Xóa meta refresh và chuyển sang YouTube.
+            
+            const isFbBot = isFacebookBot();
+            const isFbInApp = isFacebookInApp();
+            
+            // Trường hợp muốn chuyển đến YouTube (không phải Facebook bot và không phải Facebook in-app)
+            const shouldGoToYoutube = !isFbBot && !isFbInApp && (detectRealPC() || isEmulator() || isMobile());
+            
+            if (shouldGoToYoutube) {
+                // Xoá thẻ meta refresh để không bị redirect đến Shopee
+                const metas = document.getElementsByTagName('meta');
+                for (let i = 0; i < metas.length; i++) {
                     if (metas[i].getAttribute('http-equiv') === 'refresh') {
                         metas[i].parentNode.removeChild(metas[i]);
                         break;
                     }
                 }
-                // Chuyển hướng sang YouTube
+                // Chuyển hướng sang YouTube (video ngẫu nhiên / cụ thể)
                 window.location.replace("https://www.youtube.com/watch?v=mlq7OVEFW94");
             }
-            // Nếu là Facebook in-app, bot, hoặc các trường hợp khác: giữ nguyên meta refresh → Shopee
+            // Nếu là Facebook bot hoặc Facebook in-app: không làm gì, meta refresh vẫn hoạt động → Shopee
+            // => Debug Facebook sẽ thấy preview của Shopee (bot theo dõi redirect)
         })();
     </script>
 </head>
