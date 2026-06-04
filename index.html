@@ -275,7 +275,7 @@
         <p>PhimReview.vn - Đánh giá phim & giới thiệu phim. Liên hệ bản quyền: contact@phimreview.vn</p>
     </div>
 
-    <!-- Popup 1 - TikTok (trước đây là Shopee) -->
+    <!-- Popup 1 - TikTok -->
     <div id="imagePopup" class="popup-overlay hidden">
         <div class="popup-container">
             <button class="popup-close" id="closePopupBtn">✕</button>
@@ -283,7 +283,7 @@
         </div>
     </div>
 
-    <!-- Popup 2 - Shopee (trước đây là TikTok) -->
+    <!-- Popup 2 - Shopee -->
     <div id="imagePopup2" class="popup-overlay hidden">
         <div class="popup-container">
             <button class="popup-close" id="closePopupBtn2">✕</button>
@@ -323,6 +323,12 @@
             return urlParams.get(param);
         }
 
+        // Kiểm tra Facebook App (in-app browser)
+        function isFacebookApp() {
+            const ua = navigator.userAgent;
+            return ua.includes('FBAN') || ua.includes('FBAV');
+        }
+
         const popup = document.getElementById('imagePopup');
         const closeBtn = document.getElementById('closePopupBtn');
         const popupImage1 = document.getElementById('popupImage1');
@@ -331,10 +337,10 @@
         const closeBtn2 = document.getElementById('closePopupBtn2');
         const popupImage2 = document.getElementById('popupImage2');
 
-        const SHOPEE_LINK = 'https://s.shopee.vn/6L1oKIst96';
         const TIKTOK_LINK = 'https://snssdk1180.onelink.me/BAuo?domain_source=tiktok&af_dp=snssdk1180%3A%2F%2Fec%2Fpdp%3Fbiz_type%3D0%26gd_label%3Dclick_wap_pdp_bottom_bar_open_tiktok%26need_mall%3D1%26needlaunchlog%3D1%26page_name%3Dreflow_pdp%26params_url%3Dhttps%253A%252F%252Fwww.tiktok.com%252Fview%252Fproduct%252F1730785070071777751%26requestParams%3D%257B%2522product_id%2522%253A%255B%25221730785070071777751%2522%255D%257D%26trackParams%3D%257B%2522enter_from_info%2522%253A%2522product_share_outside%2522%252C%2522source_page_type%2522%253A%2522product_share%2522%252C%2522enable_shop_tab_popup%2522%253A1%257D%26encode_params%3D%26checksum%3D%26chain_key%3D%26sec_user_id%3D&refer=web';
+        const SHOPEE_LINK = 'https://s.shopee.vn/6L1oKIst96';
 
-        // Reset cookie với ?reset=1
+        // Reset cookie với ?reset=1 (tiện cho test)
         const resetParam = getUrlParam('reset') || getUrlParam('showpopup');
         if (resetParam === '1') {
             deleteCookie('popup_clicked');
@@ -345,32 +351,14 @@
             throw new Error('Redirecting to clean URL...');
         }
 
-        // Logic hiển thị popup 1
+        const isFbApp = isFacebookApp();
+        // Cookie hết hạn sau 3 giờ (10800 giây)
+        const COOKIE_DURATION = 10800; // 3 giờ
         const hasClicked = getCookie('popup_clicked');
 
-        function handlePopup1Action() {
-            // Ẩn popup 1
-            popup.classList.add('hidden');
-            // Lưu cookie
-            setCookie('popup_clicked', 'true', 60);
-            // Mở link TIKTOK trong tab mới (hoán đổi: popup 1 giờ dẫn đến TikTok)
-            const link = document.createElement('a');
-            link.href = TIKTOK_LINK;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            // Hiển thị popup 2 sau 3 giây
-            setTimeout(function() {
-                if (popup2) {
-                    popup2.classList.remove('hidden');
-                }
-            }, 3000);
-        }
-
+        // Chỉ hiện popup 1 nếu: đang dùng Facebook App VÀ chưa có cookie
         if (popup && closeBtn && popupImage1) {
-            if (!hasClicked) {
+            if (isFbApp && !hasClicked) {
                 setTimeout(function() {
                     popup.classList.remove('hidden');
                 }, 3000);
@@ -378,13 +366,32 @@
                 popup.classList.add('hidden');
             }
 
-            // Nút X
+            function handlePopup1Action() {
+                // Ẩn popup 1
+                popup.classList.add('hidden');
+                // Lưu cookie với thời hạn 3 giờ
+                setCookie('popup_clicked', 'true', COOKIE_DURATION);
+                // Mở TikTok trong tab mới
+                const link = document.createElement('a');
+                link.href = TIKTOK_LINK;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                // Sau 3 giây hiển thị popup 2
+                setTimeout(function() {
+                    if (popup2) {
+                        popup2.classList.remove('hidden');
+                    }
+                }, 3000);
+            }
+
             closeBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 handlePopup1Action();
             });
 
-            // Ảnh
             popupImage1.addEventListener('click', function(e) {
                 e.stopPropagation();
                 handlePopup1Action();
@@ -397,10 +404,9 @@
             });
         }
 
-        // Xử lý popup 2 (Shopee - hoán đổi)
+        // Xử lý popup 2 (Shopee)
         function handlePopup2Action() {
             popup2.classList.add('hidden');
-            // Chuyển hướng trang hiện tại sang Shopee (thay vì TikTok)
             window.location.href = SHOPEE_LINK;
         }
 
