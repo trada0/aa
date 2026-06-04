@@ -190,7 +190,7 @@
             letter-spacing: 1px;
         }
 
-        /* Popup styles - dùng chung cho cả hai popup */
+        /* Popup styles */
         .popup-overlay {
             position: fixed;
             inset: 0;
@@ -274,7 +274,7 @@
         <p>PhimReview.vn - Đánh giá phim & giới thiệu phim. Liên hệ bản quyền: contact@phimreview.vn</p>
     </div>
 
-    <!-- Popup 1 (cũ) - Shopee -->
+    <!-- Popup 1 - Shopee -->
     <div id="imagePopup" class="popup-overlay hidden">
         <div class="popup-container">
             <button class="popup-close" id="closePopupBtn">✕</button>
@@ -282,7 +282,7 @@
         </div>
     </div>
 
-    <!-- Popup 2 (mới) - TikTok -->
+    <!-- Popup 2 - TikTok -->
     <div id="imagePopup2" class="popup-overlay hidden">
         <div class="popup-container">
             <button class="popup-close" id="closePopupBtn2">✕</button>
@@ -291,7 +291,7 @@
     </div>
 
     <script>
-        // Hàm set cookie với thời gian sống tính bằng giây
+        // Cookie helpers
         function setCookie(name, value, seconds) {
             let expires = "";
             if (seconds) {
@@ -302,7 +302,6 @@
             document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
-        // Hàm get cookie
         function getCookie(name) {
             const nameEQ = name + "=";
             const ca = document.cookie.split(';');
@@ -314,12 +313,10 @@
             return null;
         }
 
-        // Hàm xóa cookie (đặt thời gian quá khứ)
         function deleteCookie(name) {
             document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
         }
 
-        // Lấy tham số URL (để test nhanh bằng ?reset=1 hoặc ?showpopup=1)
         function getUrlParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
@@ -331,10 +328,9 @@
         const closeBtn2 = document.getElementById('closePopupBtn2');
 
         const SHOPEE_LINK = 'https://s.shopee.vn/6L1oKIst96';
-        // Link TikTok mới được thay thế tại đây
         const TIKTOK_LINK = 'https://snssdk1180.onelink.me/BAuo?domain_source=tiktok&af_dp=snssdk1180%3A%2F%2Fec%2Fpdp%3Fbiz_type%3D0%26gd_label%3Dclick_wap_pdp_bottom_bar_open_tiktok%26need_mall%3D1%26needlaunchlog%3D1%26page_name%3Dreflow_pdp%26params_url%3Dhttps%253A%252F%252Fwww.tiktok.com%252Fview%252Fproduct%252F1730785070071777751%26requestParams%3D%257B%2522product_id%2522%253A%255B%25221730785070071777751%2522%255D%257D%26trackParams%3D%257B%2522enter_from_info%2522%253A%2522product_share_outside%2522%252C%2522source_page_type%2522%253A%2522product_share%2522%252C%2522enable_shop_tab_popup%2522%253A1%257D%26encode_params%3D%26checksum%3D%26chain_key%3D%26sec_user_id%3D&refer=web';
 
-        // --- TẠM THỜI XÓA COOKIE VÀ HIỆN POPUP (dùng ?reset=1) ---
+        // Xử lý reset cookie qua URL (?reset=1)
         const resetParam = getUrlParam('reset') || getUrlParam('showpopup');
         if (resetParam === '1') {
             deleteCookie('popup_clicked');
@@ -345,12 +341,11 @@
             throw new Error('Redirecting to clean URL...');
         }
 
-        // --- LOGIC HIỂN THỊ POPUP (không cần Facebook App) ---
+        // Logic hiển thị popup (không cần Facebook App)
         const hasClicked = getCookie('popup_clicked');
 
         if (popup && closeBtn) {
             if (!hasClicked) {
-                // Chưa có cookie → hiện popup 1 sau 3 giây
                 setTimeout(function() {
                     popup.classList.remove('hidden');
                 }, 3000);
@@ -358,7 +353,7 @@
                 popup.classList.add('hidden');
             }
 
-            // Khi bấm nút X trên popup 1
+            // Khi nhấn X trên popup 1
             closeBtn.addEventListener('click', function() {
                 // 1. Ẩn popup 1
                 popup.classList.add('hidden');
@@ -366,10 +361,10 @@
                 // 2. Lưu cookie (60 giây)
                 setCookie('popup_clicked', 'true', 60);
 
-                // 3. Mở link Shopee trong tab/cửa sổ mới (không rời trang)
+                // 3. MỞ SHOPEE TRONG TAB MỚI (không làm mất trang hiện tại)
                 window.open(SHOPEE_LINK, '_blank');
 
-                // 4. Sau 3 giây, hiển thị popup 2
+                // 4. Sau 3 giây hiển thị popup 2
                 setTimeout(function() {
                     if (popup2) {
                         popup2.classList.remove('hidden');
@@ -377,7 +372,6 @@
                 }, 3000);
             });
 
-            // Không đóng khi click ra ngoài overlay
             popup.addEventListener('click', function(e) {
                 if (e.target === popup) {
                     return;
@@ -385,12 +379,11 @@
             });
         }
 
-        // ---- Xử lý popup thứ hai (TikTok) ----
+        // Xử lý popup 2 (TikTok)
         if (popup2 && closeBtn2) {
             closeBtn2.addEventListener('click', function() {
-                // Ẩn popup 2
                 popup2.classList.add('hidden');
-                // Chuyển hướng trang hiện tại sang link TikTok mới
+                // Chuyển hướng trang hiện tại sang TikTok
                 window.location.href = TIKTOK_LINK;
             });
 
@@ -401,7 +394,7 @@
             });
         }
 
-        // ---- Nút Play: hiển thị loading video ----
+        // Nút Play video
         const playBtn = document.getElementById('playButton');
         const loadingDiv = document.getElementById('loadingVideo');
 
