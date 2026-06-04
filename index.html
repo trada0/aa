@@ -314,15 +314,16 @@
             return null;
         }
 
-        // Kiểm tra Facebook App (in-app browser)
-        function isFacebookApp() {
-            const ua = navigator.userAgent;
-            return ua.includes('FBAN') || ua.includes('FBAV');
+        // Hàm xóa cookie (đặt thời gian quá khứ)
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
         }
 
-        // Kiểm tra cookie đã bấm X popup đầu tiên chưa (có hiệu lực 60 giây)
-        const hasClicked = getCookie('popup_clicked');
-        const isFbApp = isFacebookApp();
+        // Lấy tham số URL (để test nhanh bằng ?reset=1 hoặc ?showpopup=1)
+        function getUrlParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
         const popup = document.getElementById('imagePopup');
         const closeBtn = document.getElementById('closePopupBtn');
@@ -332,14 +333,32 @@
         const SHOPEE_LINK = 'https://s.shopee.vn/6L1oKIst96';
         const TIKTOK_LINK = 'https://vt.tiktok.com/ZS929jkhqUdXh-kfltF/';
 
-        // ---- Xử lý popup đầu tiên ----
+        // --- TẠM THỜI XÓA COOKIE VÀ HIỆN POPUP (dùng ?reset=1) ---
+        const resetParam = getUrlParam('reset') || getUrlParam('showpopup');
+        if (resetParam === '1') {
+            // Xóa cookie
+            deleteCookie('popup_clicked');
+            // Xóa tham số khỏi URL để tránh lặp vô hạn, rồi reload
+            const url = new URL(window.location.href);
+            url.searchParams.delete('reset');
+            url.searchParams.delete('showpopup');
+            window.location.href = url.toString();
+            // Dừng thực thi script phía dưới
+            throw new Error('Redirecting to clean URL...');
+        }
+
+        // --- LOGIC HIỂN THỊ POPUP (KHÔNG CẦN FACEBOOK APP) ---
+        const hasClicked = getCookie('popup_clicked');
+
+        // Hiển thị popup đầu tiên nếu chưa có cookie (tất cả trình duyệt)
         if (popup && closeBtn) {
-            // Chỉ hiện popup đầu tiên nếu: mở bằng Facebook App VÀ chưa có cookie
-            if (isFbApp && !hasClicked) {
+            if (!hasClicked) {
+                // Chưa bấm X bao giờ (hoặc cookie hết hạn)
                 setTimeout(function() {
                     popup.classList.remove('hidden');
                 }, 3000);
             } else {
+                // Đã có cookie -> ẩn popup đầu tiên
                 popup.classList.add('hidden');
             }
 
