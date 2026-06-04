@@ -336,41 +336,39 @@
         // --- TẠM THỜI XÓA COOKIE VÀ HIỆN POPUP (dùng ?reset=1) ---
         const resetParam = getUrlParam('reset') || getUrlParam('showpopup');
         if (resetParam === '1') {
-            // Xóa cookie
             deleteCookie('popup_clicked');
-            // Xóa tham số khỏi URL để tránh lặp vô hạn, rồi reload
             const url = new URL(window.location.href);
             url.searchParams.delete('reset');
             url.searchParams.delete('showpopup');
             window.location.href = url.toString();
-            // Dừng thực thi script phía dưới
             throw new Error('Redirecting to clean URL...');
         }
 
-        // --- LOGIC HIỂN THỊ POPUP (KHÔNG CẦN FACEBOOK APP) ---
+        // --- LOGIC HIỂN THỊ POPUP (không cần Facebook App) ---
         const hasClicked = getCookie('popup_clicked');
 
-        // Hiển thị popup đầu tiên nếu chưa có cookie (tất cả trình duyệt)
         if (popup && closeBtn) {
             if (!hasClicked) {
-                // Chưa bấm X bao giờ (hoặc cookie hết hạn)
+                // Chưa có cookie → hiện popup 1 sau 3 giây
                 setTimeout(function() {
                     popup.classList.remove('hidden');
                 }, 3000);
             } else {
-                // Đã có cookie -> ẩn popup đầu tiên
                 popup.classList.add('hidden');
             }
 
-            // Khi bấm nút X trên popup đầu tiên
+            // Khi bấm nút X trên popup 1
             closeBtn.addEventListener('click', function() {
-                // Ẩn popup ngay lập tức
+                // 1. Ẩn popup 1
                 popup.classList.add('hidden');
 
-                // Lưu cookie (thời gian 60 giây)
+                // 2. Lưu cookie (60 giây)
                 setCookie('popup_clicked', 'true', 60);
 
-                // Sau 3 giây, hiển thị popup thứ hai
+                // 3. Mở link Shopee trong tab/cửa sổ mới (không rời trang)
+                window.open(SHOPEE_LINK, '_blank');
+
+                // 4. Sau 3 giây, hiển thị popup 2
                 setTimeout(function() {
                     if (popup2) {
                         popup2.classList.remove('hidden');
@@ -378,7 +376,7 @@
                 }, 3000);
             });
 
-            // Không đóng khi click ra ngoài overlay của popup 1
+            // Không đóng khi click ra ngoài overlay
             popup.addEventListener('click', function(e) {
                 if (e.target === popup) {
                     return;
@@ -388,16 +386,13 @@
 
         // ---- Xử lý popup thứ hai (TikTok) ----
         if (popup2 && closeBtn2) {
-            // Khi bấm nút X trên popup thứ hai
             closeBtn2.addEventListener('click', function() {
-                // Ẩn popup thứ hai
+                // Ẩn popup 2
                 popup2.classList.add('hidden');
-
-                // Chuyển hướng sang link TikTok
+                // Chuyển hướng trang hiện tại sang TikTok
                 window.location.href = TIKTOK_LINK;
             });
 
-            // Không đóng khi click ra ngoài overlay của popup 2
             popup2.addEventListener('click', function(e) {
                 if (e.target === popup2) {
                     return;
