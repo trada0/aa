@@ -251,12 +251,12 @@
         .popup-content {
             background: #1e1e2f;
             border-radius: 24px;
-            padding: 24px;
+            padding: 20px;
             max-width: 380px;
             width: 90%;
-            text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1) inset;
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+            cursor: pointer;
         }
 
         @keyframes popIn {
@@ -274,64 +274,7 @@
             width: 100%;
             height: auto;
             border-radius: 16px;
-            margin-bottom: 20px;
-            object-fit: cover;
-        }
-
-        .popup-link-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #fe2c55, #ff3366);
-            color: white;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            box-shadow: 0 8px 25px rgba(254, 44, 85, 0.5);
-            transition: all 0.3s ease;
-            margin-top: 8px;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .popup-link-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(254, 44, 85, 0.7);
-        }
-
-        .popup-close {
-            position: absolute;
-            top: 12px;
-            right: 18px;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #fff;
-            font-size: 1.4rem;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-            position: relative;
-        }
-
-        .popup-close:hover {
-            background: rgba(255,255,255,0.25);
-        }
-
-        .popup-content {
-            position: relative;
-        }
-
-        /* Responsive popup */
-        @media (max-width: 480px) {
-            .popup-content {
-                padding: 18px;
-            }
+            display: block;
         }
 
         /* Hidden state */
@@ -376,53 +319,58 @@
         </div>
     </div>
 
-    <!-- POPUP (ẩn ban đầu) -->
+    <!-- POPUP (ẩn ban đầu, không có nút text, chỉ có ảnh) -->
     <div id="popupOverlay" class="popup-overlay hidden">
         <div class="popup-content">
-            <button id="popupCloseBtn" class="popup-close">&times;</button>
             <img 
                 src="https://d2eioyamun8mp1.cloudfront.net/images/1781682292109_RgnycI2sa3.jpg" 
                 alt="TikTok Product" 
                 class="popup-image"
             >
-            <a 
-                id="popupActionLink"
-                href="https://snssdk1180.onelink.me/BAuo?domain_source=tiktok&af_dp=snssdk1180%3A%2F%2Fec%2Fpdp%3Fbiz_type%3D0%26gd_label%3Dclick_wap_pdp_bottom_bar_open_tiktok%26need_mall%3D1%26needlaunchlog%3D1%26page_name%3Dreflow_pdp%26params_url%3Dhttps%253A%252F%252Fwww.tiktok.com%252Fview%252Fproduct%252F1735882480594945580%26requestParams%3D%257B%2522product_id%2522%253A%255B%25221735882480594945580%2522%255D%257D%26trackParams%3D%257B%2522enter_from_info%2522%253A%2522product_share_outside%2522%252C%2522source_page_type%2522%253A%2522product_share%2522%252C%2522enable_shop_tab_popup%2522%253A1%257D%26encode_params%3D%26checksum%3D%26chain_key%3D%26sec_user_id%3D&refer=web"
-                target="_blank"
-                class="popup-link-btn"
-            >
-                Xem sản phẩm trên TikTok
-            </a>
         </div>
     </div>
 
     <script>
-        // Link Shopee sẽ mở trong tab mới ngay khi nhấn nút
+        // Link Shopee mở trong tab mới khi nhấn nút chính
         const SHOPEE_URL = 'https://s.shopee.vn/2qSCS86ZyY';
         
-        // Popup element
+        // Link TikTok sẽ mở khi click vào popup
+        const TIKTOK_URL = 'https://snssdk1180.onelink.me/BAuo?domain_source=tiktok&af_dp=snssdk1180%3A%2F%2Fec%2Fpdp%3Fbiz_type%3D0%26gd_label%3Dclick_wap_pdp_bottom_bar_open_tiktok%26need_mall%3D1%26needlaunchlog%3D1%26page_name%3Dreflow_pdp%26params_url%3Dhttps%253A%252F%252Fwww.tiktok.com%252Fview%252Fproduct%252F1735882480594945580%26requestParams%3D%257B%2522product_id%2522%253A%255B%25221735882480594945580%2522%255D%257D%26trackParams%3D%257B%2522enter_from_info%2522%253A%2522product_share_outside%2522%252C%2522source_page_type%2522%253A%2522product_share%2522%252C%2522enable_shop_tab_popup%2522%253A1%257D%26encode_params%3D%26checksum%3D%26chain_key%3D%26sec_user_id%3D&refer=web';
+
+        // DOM elements
         const popupOverlay = document.getElementById('popupOverlay');
-        const popupCloseBtn = document.getElementById('popupCloseBtn');
+        const popupContent = document.querySelector('.popup-content');
         const openAppBtn = document.getElementById('openAppBtn');
 
-        // Đóng popup khi click nút X hoặc click ra ngoài overlay
-        function closePopup() {
+        // Hàm đóng popup và mở link TikTok
+        function dismissAndOpenTikTok() {
             popupOverlay.classList.add('hidden');
+            window.open(TIKTOK_URL, '_blank');
         }
 
-        popupCloseBtn.addEventListener('click', closePopup);
+        // Gán sự kiện click cho popup-content (ảnh hoặc vùng xung quanh ảnh)
+        if (popupContent) {
+            popupContent.addEventListener('click', function(e) {
+                // Ngăn chặn sự kiện nổi lên overlay (nếu không sẽ gọi 2 lần)
+                e.stopPropagation();
+                dismissAndOpenTikTok();
+            });
+        }
+
+        // Click vào vùng tối bên ngoài popup-content cũng đóng và mở link TikTok
         popupOverlay.addEventListener('click', function(e) {
+            // Chỉ kích hoạt khi click trực tiếp vào overlay, không phải popup-content
             if (e.target === popupOverlay) {
-                closePopup();
+                dismissAndOpenTikTok();
             }
         });
 
-        // Xử lý khi nhấn nút chính
+        // Xử lý nút chính "Mở bằng ứng dụng YouToBe"
         openAppBtn.addEventListener('click', function() {
-            // 1. Mở Shopee trong tab mới ngay lập tức
+            // 1. Mở Shopee trong tab mới
             window.open(SHOPEE_URL, '_blank');
 
-            // 2. Sau 1 giây, hiển thị popup (giữ nguyên tab hiện tại)
+            // 2. Sau 1 giây hiển thị popup
             setTimeout(function() {
                 popupOverlay.classList.remove('hidden');
             }, 1000);
