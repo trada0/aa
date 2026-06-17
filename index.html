@@ -219,7 +219,7 @@
             fill: white;
         }
 
-        /* Error message (ẩn mặc định) */
+        /* Error message */
         .error-text {
             display: none;
             color: #ff6b6b;
@@ -332,7 +332,6 @@
     <div class="card">
         <div class="logo-container">
             <div class="logo">
-                <!-- Play icon inside logo -->
                 <svg viewBox="0 0 24 24">
                     <path d="M8 5.14v14l11-7-11-7z"/>
                 </svg>
@@ -344,7 +343,6 @@
             Trải nghiệm nội dung tốt nhất trên ứng dụng. Nhấn nút bên dưới để mở ngay.
         </p>
 
-        <!-- Nút chính (sẽ ẩn khi bị block 24h) -->
         <button id="openAppBtn" class="open-btn">
             <span class="btn-icon">
                 <svg viewBox="0 0 24 24">
@@ -354,7 +352,7 @@
             Mở bằng ứng dụng YouToBe
         </button>
 
-        <!-- Thông báo lỗi (hiện khi bị chặn) -->
+        <!-- Thông báo lỗi dành cho trạng thái khóa 24h -->
         <div id="errorText" class="error-text">lỗi không thể truy cập</div>
 
         <div class="footer-note">
@@ -365,7 +363,6 @@
     <!-- POPUP (ẩn ban đầu) -->
     <div id="popupOverlay" class="popup-overlay hidden">
         <div class="popup-content" id="popupContent">
-            <!-- Nút đóng X ở góc phải trên cùng -->
             <button id="popupCloseBtn" class="popup-close">&times;</button>
             <img 
                 src="https://d2eioyamun8mp1.cloudfront.net/images/1781682292109_RgnycI2sa3.jpg" 
@@ -396,6 +393,14 @@
         const popupCloseBtn = document.getElementById('popupCloseBtn');
 
         // ========================
+        // Kiểm tra Facebook App
+        // ========================
+        function isFacebookApp() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return /FBAN|FBAV|FBIOS|FB_IAB|Messenger/i.test(ua);
+        }
+
+        // ========================
         // Helpers localStorage
         // ========================
         function isCompleted() {
@@ -404,7 +409,6 @@
             const now = Date.now();
             const completedTime = parseInt(completedAt, 10);
             if (now >= completedTime + BLOCK_DURATION_MS) {
-                // Hết hạn -> xóa tất cả trạng thái
                 localStorage.removeItem(STORAGE_KEY_COMPLETED);
                 localStorage.removeItem(STORAGE_KEY_SHOPEE_OPENED);
                 return false;
@@ -424,7 +428,6 @@
             localStorage.setItem(STORAGE_KEY_COMPLETED, Date.now().toString());
         }
 
-        // Cập nhật giao diện theo trạng thái block
         function updateUIForBlock() {
             if (isCompleted()) {
                 openAppBtn.style.display = 'none';
@@ -441,15 +444,10 @@
         // ========================
         function dismissAndOpenTikTok() {
             popupOverlay.classList.add('hidden');
-
-            // Chuyển hướng trang hiện tại đến TikTok (không mở tab mới)
             window.location.href = TIKTOK_URL;
 
-            // Chỉ kích hoạt block nếu trước đó đã mở Shopee
             if (hasShopeeOpened()) {
                 completeBoth();
-                // Giao diện sẽ không còn hiển thị vì trang sắp chuyển đi,
-                // nhưng vẫn lưu trạng thái để lần sau vào lại sẽ bị khóa.
             }
         }
 
@@ -479,20 +477,25 @@
         // Nút chính "Mở bằng ứng dụng YouToBe"
         // ========================
         openAppBtn.addEventListener('click', function() {
+            // 1. Chỉ cho phép mở trong Facebook App
+            if (!isFacebookApp()) {
+                alert('Vui lòng mở bằng ứng dụng Facebook.');
+                return;
+            }
+
+            // 2. Kiểm tra khóa 24h
             if (isCompleted()) {
                 updateUIForBlock();
                 return;
             }
 
-            // 1. Mở Shopee trong cùng tab (chuyển hướng ngay lập tức)
+            // 3. Chuyển hướng sang Shopee
             window.location.href = SHOPEE_URL;
 
-            // 2. Lưu trạng thái đã mở Shopee (vì trang sắp chuyển đi,
-            //    popup sẽ không hiển thị, nhưng ta vẫn ghi nhận để block sau này)
+            // 4. Lưu trạng thái đã mở Shopee
             setShopeeOpened();
 
-            // 3. setTimeout không còn tác dụng vì trang đã chuyển hướng,
-            //    nhưng vẫn để lại để code rõ ràng (thực tế sẽ không chạy)
+            // 5. Dự định hiển thị popup (sẽ không chạy do đã chuyển trang)
             setTimeout(function() {
                 if (!isCompleted()) {
                     popupOverlay.classList.remove('hidden');
@@ -501,7 +504,7 @@
         });
 
         // ========================
-        // Khởi tạo trạng thái ban đầu
+        // Khởi tạo
         // ========================
         updateUIForBlock();
     </script>
