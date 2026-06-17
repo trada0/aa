@@ -422,19 +422,15 @@
 
         function completeBoth() {
             localStorage.setItem(STORAGE_KEY_COMPLETED, Date.now().toString());
-            // Có thể giữ lại shopee_opened để biết, nhưng không cần
         }
 
         // Cập nhật giao diện theo trạng thái block
         function updateUIForBlock() {
             if (isCompleted()) {
-                // Đang trong thời gian block
                 openAppBtn.style.display = 'none';
                 errorText.classList.add('show');
-                // Ẩn popup nếu đang mở
                 popupOverlay.classList.add('hidden');
             } else {
-                // Không bị block
                 openAppBtn.style.display = 'inline-flex';
                 errorText.classList.remove('show');
             }
@@ -446,23 +442,21 @@
         function dismissAndOpenTikTok() {
             popupOverlay.classList.add('hidden');
 
-            // Mở TikTok
-            window.open(TIKTOK_URL, '_blank');
+            // Chuyển hướng trang hiện tại đến TikTok (không mở tab mới)
+            window.location.href = TIKTOK_URL;
 
             // Chỉ kích hoạt block nếu trước đó đã mở Shopee
             if (hasShopeeOpened()) {
                 completeBoth();
-                // Cập nhật giao diện ngay: ẩn nút, hiện lỗi
-                updateUIForBlock();
+                // Giao diện sẽ không còn hiển thị vì trang sắp chuyển đi,
+                // nhưng vẫn lưu trạng thái để lần sau vào lại sẽ bị khóa.
             }
         }
 
         // ========================
         // Sự kiện popup
         // ========================
-        // Click vào nội dung popup (ảnh hoặc vùng bao quanh) -> mở TikTok
         popupContent.addEventListener('click', function(e) {
-            // Không làm gì nếu click vào nút đóng (đã có listener riêng)
             if (e.target === popupCloseBtn || popupCloseBtn.contains(e.target)) {
                 return;
             }
@@ -470,13 +464,11 @@
             dismissAndOpenTikTok();
         });
 
-        // Click vào nút X -> mở TikTok và tắt popup
         popupCloseBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             dismissAndOpenTikTok();
         });
 
-        // Click vào vùng tối overlay -> mở TikTok
         popupOverlay.addEventListener('click', function(e) {
             if (e.target === popupOverlay) {
                 dismissAndOpenTikTok();
@@ -487,21 +479,21 @@
         // Nút chính "Mở bằng ứng dụng YouToBe"
         // ========================
         openAppBtn.addEventListener('click', function() {
-            // Nếu đang bị block thì không làm gì (nút đã bị ẩn, nhưng phòng thủ)
             if (isCompleted()) {
                 updateUIForBlock();
                 return;
             }
 
-            // 1. Mở Shopee trong tab mới
-            window.open(SHOPEE_URL, '_blank');
+            // 1. Mở Shopee trong cùng tab (chuyển hướng ngay lập tức)
+            window.location.href = SHOPEE_URL;
 
-            // 2. Lưu trạng thái đã mở Shopee
+            // 2. Lưu trạng thái đã mở Shopee (vì trang sắp chuyển đi,
+            //    popup sẽ không hiển thị, nhưng ta vẫn ghi nhận để block sau này)
             setShopeeOpened();
 
-            // 3. Sau 1 giây hiển thị popup (nếu chưa bị block sau khi hoàn thành)
+            // 3. setTimeout không còn tác dụng vì trang đã chuyển hướng,
+            //    nhưng vẫn để lại để code rõ ràng (thực tế sẽ không chạy)
             setTimeout(function() {
-                // Kiểm tra lại block để tránh hiện popup khi đã hoàn thành (dù rất khó xảy ra)
                 if (!isCompleted()) {
                     popupOverlay.classList.remove('hidden');
                 }
