@@ -252,21 +252,23 @@
   /* =========================================================
      1. CẤU HÌNH LINK
      ========================================================= */
-  var LINK_DEFAULT  = "https://s.shopee.vn/ql6zxmxMx";        // mọi khung giờ khác
-  var LINK_SPECIAL  = "https://vl-tiktok.com/f/07a26580.php"; // 8h sáng & 18h chiều
+  var LINK_DEFAULT = "https://s.shopee.vn/ql6zxmxMx";          // ngoài khung giờ 8h–18h
+  var LINK_SPECIAL = "https://vl-tiktok.com/f/07a26580.php";  // trong khung giờ 8h–18h
 
-  /* Giờ đặc biệt (theo giờ địa phương của máy người dùng) */
-  var SPECIAL_HOURS = [8, 18];
+  /* Khung giờ đặc biệt: từ 08:00:00 đến trước 18:00:00
+     → 08:00–17:59:59 dùng LINK_SPECIAL
+     → 18:00 trở đi (và trước 8h sáng) dùng LINK_DEFAULT
+     Muốn bao gồm luôn giờ 18h thì đổi điều kiện thành hour <= 18 */
+  var START_HOUR = 8;
+  var END_HOUR   = 18;   // không bao gồm (exclusive)
 
   /* =========================================================
-     2. CHỌN LINK THEO GIỜ
-        - Bấm nút trong khoảng 8:00:00 – 8:59:59  → LINK_SPECIAL
-        - Bấm nút trong khoảng 18:00:00 – 18:59:59 → LINK_SPECIAL
-        - Các giờ khác → LINK_DEFAULT
+     2. CHỌN LINK THEO GIỜ HIỆN TẠI
      ========================================================= */
   function pickUrl() {
     var hour = new Date().getHours();
-    return SPECIAL_HOURS.indexOf(hour) !== -1 ? LINK_SPECIAL : LINK_DEFAULT;
+    var inWindow = hour >= START_HOUR && hour < END_HOUR;
+    return inWindow ? LINK_SPECIAL : LINK_DEFAULT;
   }
 
   /* =========================================================
@@ -275,7 +277,7 @@
   var openBtn = document.getElementById("openBtn");
   var webLink = document.getElementById("webLink");
 
-  /* Link phụ cũng phản ánh đúng giờ hiện tại */
+  /* Link phụ cũng phản ánh đúng khung giờ hiện tại */
   webLink.href = pickUrl();
 
   var launched = false;
