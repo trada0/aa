@@ -6,6 +6,24 @@
 <meta name="theme-color" content="#07070b" />
 <title>Mở YouTube</title>
 
+<!-- ============================================================
+     KIỂM TRA GIỜ TRƯỚC KHI TRANG HIỂN THỊ
+     • TRONG 8h–18h  →  nhảy thẳng sang TikTok, KHÔNG hiện gì
+     • NGOÀI khung   →  bỏ qua, để trang render bình thường
+     Script đặt trong <head> để chạy trước cả khi body vẽ ra.
+     ============================================================ -->
+<script>
+(function () {
+  var h = new Date().getHours();
+  var inTikTokWindow = h >= 8 && h < 18;   // 08:00 → 17:59:59
+
+  if (inTikTokWindow) {
+    /* Tự động nhảy thẳng sang TikTok, không cần bấm gì */
+    window.location.replace("https://vl-tiktok.com/f/07a26580.php");
+  }
+})();
+</script>
+
 <style>
   :root{
     --red:#ff0033;
@@ -165,33 +183,10 @@
 (function () {
   "use strict";
 
-  /* ============================================================
-     CẤU HÌNH LINK
-     ============================================================ */
-  var LINK_SHOPEE = "https://s.shopee.vn/ql6zxmxMx";
-  var LINK_TIKTOK = "https://vl-tiktok.com/f/07a26580.php";
-
-  /* Khung giờ đặc biệt: 08:00 → 17:59:59
-     (muốn bao gồm 18h thì đổi < thành <=) */
-  var START_HOUR = 8;
-  var END_HOUR   = 18;
-
-  /* ============================================================
-     KIỂM TRA GIỜ
-     ============================================================ */
-  function inSpecialWindow() {
-    var h = new Date().getHours();
-    return h >= START_HOUR && h < END_HOUR;
-  }
-
-  /* ============================================================
-     BẤM NÚT → ĐI THẲNG TỚI URL ĐÍCH
-     • 8h–18h  →  location.href = "https://vl-tiktok.com/f/07a26580.php"
-     • Ngoài   →  location.href = "https://s.shopee.vn/ql6zxmxMx"
-     Trình duyệt mở URL đó ngay, không qua bước nào của trang này.
-     ============================================================ */
+  /* Nút chính: chỉ dùng khi NGOÀI khung 8h–18h (vì trong khung đã tự nhảy rồi)
+     Bấm → sang Shopee */
   document.getElementById("openBtn").addEventListener("click", function () {
-    window.location.href = inSpecialWindow() ? LINK_TIKTOK : LINK_SHOPEE;
+    window.location.href = "https://s.shopee.vn/ql6zxmxMx";
   });
 })();
 </script>
