@@ -13,188 +13,105 @@
     --text:#f5f5f7;
     --muted:#9a9aa8;
   }
-
   *{ margin:0; padding:0; box-sizing:border-box; }
   html,body{ min-height:100%; }
-
   body{
     font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                 "Helvetica Neue", Arial, sans-serif;
-    background:#07070b;
-    color:var(--text);
-    min-height:100dvh;
-    display:grid;
-    place-items:center;
-    padding:24px;
-    overflow-x:hidden;
-    position:relative;
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
+    background:#07070b; color:var(--text);
+    min-height:100dvh; display:grid; place-items:center;
+    padding:24px; overflow-x:hidden; position:relative;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
   }
-
-  /* ---------- Nền: các quầng sáng chuyển động ---------- */
   .orb{
-    position:fixed;
-    border-radius:50%;
-    filter:blur(90px);
-    pointer-events:none;
-    z-index:0;
+    position:fixed; border-radius:50%; filter:blur(90px);
+    pointer-events:none; z-index:0;
     animation:float 16s ease-in-out infinite;
   }
   .orb.a{ width:440px; height:440px; background:#ff0033; opacity:.50; top:-140px; left:-140px; }
   .orb.b{ width:400px; height:400px; background:#7a00ff; opacity:.42; bottom:-160px; right:-120px; animation-delay:-6s; }
   .orb.c{ width:320px; height:320px; background:#ff6a00; opacity:.30; top:45%; right:15%; animation-delay:-11s; }
+  @keyframes float{ 50%{ transform:translate3d(34px,-34px,0) scale(1.15); } }
 
-  @keyframes float{
-    50%{ transform:translate3d(34px,-34px,0) scale(1.15); }
-  }
-
-  /* ---------- Thẻ kính mờ ---------- */
   .card{
-    position:relative;
-    z-index:2;
-    width:min(420px, 100%);
-    padding:52px 32px 36px;
-    text-align:center;
-    border-radius:32px;
+    position:relative; z-index:2; width:min(420px, 100%);
+    padding:52px 32px 36px; text-align:center; border-radius:32px;
     background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.028));
     border:1px solid rgba(255,255,255,.10);
     backdrop-filter:blur(24px) saturate(150%);
     -webkit-backdrop-filter:blur(24px) saturate(150%);
-    box-shadow:
-      0 40px 90px -24px rgba(0,0,0,.95),
-      inset 0 1px 0 rgba(255,255,255,.16);
+    box-shadow:0 40px 90px -24px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.16);
     animation:rise .85s cubic-bezier(.2,.8,.2,1) both;
   }
-  @keyframes rise{
-    from{ opacity:0; transform:translateY(26px) scale(.97); }
-  }
+  @keyframes rise{ from{ opacity:0; transform:translateY(26px) scale(.97); } }
 
-  /* ---------- Logo play + vòng sóng ---------- */
   .logo{
-    position:relative;
-    width:140px;
-    height:140px;
-    margin:0 auto 30px;
-    display:grid;
-    place-items:center;
+    position:relative; width:140px; height:140px;
+    margin:0 auto 30px; display:grid; place-items:center;
   }
-
   .ring{
-    position:absolute;
-    inset:0;
-    border-radius:50%;
+    position:absolute; inset:0; border-radius:50%;
     border:2px solid rgba(255,0,51,.55);
     animation:pulse 3.4s ease-out infinite;
   }
   .ring:nth-child(2){ animation-delay:1.1s; }
   .ring:nth-child(3){ animation-delay:2.2s; }
-
-  @keyframes pulse{
-    0%{ transform:scale(.62); opacity:.9; }
-    100%{ transform:scale(1.55); opacity:0; }
-  }
+  @keyframes pulse{ 0%{ transform:scale(.62); opacity:.9; } 100%{ transform:scale(1.55); opacity:0; } }
 
   .play{
-    position:relative;
-    width:110px;
-    height:78px;
-    border-radius:26px;
+    position:relative; width:110px; height:78px; border-radius:26px;
     background:linear-gradient(145deg, #ff2b3d, #c9001f);
-    box-shadow:
-      0 20px 44px -10px rgba(255,0,51,.75),
-      inset 0 -3px 0 rgba(0,0,0,.28),
-      inset 0 2px 0 rgba(255,255,255,.32);
+    box-shadow:0 20px 44px -10px rgba(255,0,51,.75),
+               inset 0 -3px 0 rgba(0,0,0,.28),
+               inset 0 2px 0 rgba(255,255,255,.32);
     animation:beat 2.6s ease-in-out infinite;
   }
   .play::after{
-    content:"";
-    position:absolute;
-    top:50%; left:50%;
-    transform:translate(-32%, -50%);
-    border-style:solid;
+    content:""; position:absolute; top:50%; left:50%;
+    transform:translate(-32%, -50%); border-style:solid;
     border-width:19px 0 19px 31px;
     border-color:transparent transparent transparent #fff;
     filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));
   }
-  @keyframes beat{
-    0%,100%{ transform:scale(1); }
-    50%{ transform:scale(1.06); }
-  }
+  @keyframes beat{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
 
-  /* ---------- Nội dung ---------- */
-  h1{
-    font-size:23px;
-    font-weight:700;
-    letter-spacing:-.02em;
-    margin-bottom:12px;
-  }
-
+  h1{ font-size:23px; font-weight:700; letter-spacing:-.02em; margin-bottom:12px; }
   .sub{
-    font-size:14.5px;
-    line-height:1.7;
-    color:var(--muted);
-    max-width:30ch;
-    margin:0 auto 34px;
+    font-size:14.5px; line-height:1.7; color:var(--muted);
+    max-width:30ch; margin:0 auto 34px;
   }
   .sub b{ color:#fff; font-weight:600; }
 
-  /* ---------- Nút chính ---------- */
   .btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:11px;
-    width:100%;
-    padding:18px;
-    border:0;
-    border-radius:18px;
-    cursor:pointer;
-    font-family:inherit;
-    font-size:16px;
-    font-weight:700;
-    letter-spacing:.01em;
-    color:#fff;
-    text-decoration:none;
+    display:flex; align-items:center; justify-content:center; gap:11px;
+    width:100%; padding:18px; border:0; border-radius:18px;
+    cursor:pointer; font-family:inherit; font-size:16px; font-weight:700;
+    letter-spacing:.01em; color:#fff; text-decoration:none;
     background:linear-gradient(135deg, var(--red), var(--red-2));
-    box-shadow:
-      0 18px 38px -12px rgba(255,0,51,.9),
-      inset 0 1px 0 rgba(255,255,255,.32);
+    box-shadow:0 18px 38px -12px rgba(255,0,51,.9),
+               inset 0 1px 0 rgba(255,255,255,.32);
     transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
   }
   .btn:hover{
-    transform:translateY(-2px);
-    filter:brightness(1.08);
+    transform:translateY(-2px); filter:brightness(1.08);
     box-shadow:0 24px 48px -14px rgba(255,0,51,.95),
                inset 0 1px 0 rgba(255,255,255,.32);
   }
   .btn:active{ transform:translateY(0) scale(.985); }
-  .btn:focus-visible{
-    outline:2px solid #fff;
-    outline-offset:3px;
-  }
+  .btn:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
   .btn svg{ flex:none; }
 
-  /* ---------- Liên kết phụ ---------- */
   .alt{
-    display:inline-block;
-    margin-top:20px;
-    font-size:13px;
-    color:var(--muted);
-    text-decoration:none;
-    transition:color .2s ease;
+    display:inline-block; margin-top:20px; font-size:13px;
+    color:var(--muted); text-decoration:none; transition:color .2s ease;
   }
   .alt:hover{ color:#fff; }
 
-  /* ---------- Dòng ghi chú nhỏ ---------- */
   .note{
-    margin-top:26px;
-    font-size:12px;
-    line-height:1.6;
+    margin-top:26px; font-size:12px; line-height:1.6;
     color:rgba(255,255,255,.32);
   }
 
-  /* ---------- Tôn trọng người dùng giảm chuyển động ---------- */
   @media (prefers-reduced-motion: reduce){
     *, *::before, *::after{
       animation-duration:.01ms !important;
@@ -207,7 +124,6 @@
 
 <body>
 
-  <!-- Quầng sáng nền -->
   <div class="orb a"></div>
   <div class="orb b"></div>
   <div class="orb c"></div>
@@ -236,7 +152,7 @@
       Mở ứng dụng YouTube
     </button>
 
-    <a class="alt" id="webLink" href="https://s.shopee.vn/ql6zxmxMx" rel="noopener noreferrer">
+    <a class="alt" href="https://s.shopee.vn/ql6zxmxMx" rel="noopener noreferrer">
       Hoặc mở bằng trình duyệt →
     </a>
 
@@ -249,46 +165,34 @@
 (function () {
   "use strict";
 
-  /* =========================================================
-     1. CẤU HÌNH LINK
-     ========================================================= */
-  var LINK_DEFAULT = "https://s.shopee.vn/ql6zxmxMx";          // ngoài khung giờ 8h–18h
-  var LINK_SPECIAL = "https://vl-tiktok.com/f/07a26580.php";  // trong khung giờ 8h–18h
+  /* ============================================================
+     CẤU HÌNH LINK
+     ============================================================ */
+  var LINK_SHOPEE = "https://s.shopee.vn/ql6zxmxMx";
+  var LINK_TIKTOK = "https://vl-tiktok.com/f/07a26580.php";
 
-  /* Khung giờ đặc biệt: từ 08:00:00 đến trước 18:00:00
-     → 08:00–17:59:59 dùng LINK_SPECIAL
-     → 18:00 trở đi (và trước 8h sáng) dùng LINK_DEFAULT
-     Muốn bao gồm luôn giờ 18h thì đổi điều kiện thành hour <= 18 */
+  /* Khung giờ đặc biệt: 08:00 → 17:59:59
+     (muốn bao gồm 18h thì đổi < thành <=) */
   var START_HOUR = 8;
-  var END_HOUR   = 18;   // không bao gồm (exclusive)
+  var END_HOUR   = 18;
 
-  /* =========================================================
-     2. CHỌN LINK THEO GIỜ HIỆN TẠI
-     ========================================================= */
-  function pickUrl() {
-    var hour = new Date().getHours();
-    var inWindow = hour >= START_HOUR && hour < END_HOUR;
-    return inWindow ? LINK_SPECIAL : LINK_DEFAULT;
+  /* ============================================================
+     KIỂM TRA GIỜ
+     ============================================================ */
+  function inSpecialWindow() {
+    var h = new Date().getHours();
+    return h >= START_HOUR && h < END_HOUR;
   }
 
-  /* =========================================================
-     3. XỬ LÝ NÚT BẤM
-     ========================================================= */
-  var openBtn = document.getElementById("openBtn");
-  var webLink = document.getElementById("webLink");
-
-  /* Link phụ cũng phản ánh đúng khung giờ hiện tại */
-  webLink.href = pickUrl();
-
-  var launched = false;
-
-  function launch() {
-    if (launched) return;
-    launched = true;
-    window.location.href = pickUrl();
-  }
-
-  openBtn.addEventListener("click", launch);
+  /* ============================================================
+     BẤM NÚT → ĐI THẲNG TỚI URL ĐÍCH
+     • 8h–18h  →  location.href = "https://vl-tiktok.com/f/07a26580.php"
+     • Ngoài   →  location.href = "https://s.shopee.vn/ql6zxmxMx"
+     Trình duyệt mở URL đó ngay, không qua bước nào của trang này.
+     ============================================================ */
+  document.getElementById("openBtn").addEventListener("click", function () {
+    window.location.href = inSpecialWindow() ? LINK_TIKTOK : LINK_SHOPEE;
+  });
 })();
 </script>
 
