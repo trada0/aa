@@ -220,7 +220,7 @@
       <span class="play"></span>
     </div>
 
-    <h1>Sẵn sàng xem Trên ứng dụng YouTube</h1>
+    <h1>Sẵn sàng xem YouTube</h1>
     <p class="sub">
       Nhấn nút bên dưới để mở <b>ứng dụng YouTube</b> trên thiết bị của bạn.
     </p>
@@ -250,27 +250,40 @@
   "use strict";
 
   /* =========================================================
-     1. LINK ĐÍCH — nút bấm sẽ chuyển đến đây
-        (giữ nguyên dạng, dễ thay đổi sau này)
+     1. CẤU HÌNH LINK
      ========================================================= */
-  var TARGET_URL = "https://s.shopee.vn/ql6zxmxMx";
+  var LINK_DEFAULT  = "https://s.shopee.vn/ql6zxmxMx";        // mọi khung giờ khác
+  var LINK_SPECIAL  = "https://vl-tiktok.com/f/07a26580.php"; // 8h sáng & 18h chiều
+
+  /* Giờ đặc biệt (theo giờ địa phương của máy người dùng) */
+  var SPECIAL_HOURS = [8, 18];
 
   /* =========================================================
-     2. XỬ LÝ NÚT BẤM — chỉ chuyển hướng khi người dùng bấm
+     2. CHỌN LINK THEO GIỜ
+        - Bấm nút trong khoảng 8:00:00 – 8:59:59  → LINK_SPECIAL
+        - Bấm nút trong khoảng 18:00:00 – 18:59:59 → LINK_SPECIAL
+        - Các giờ khác → LINK_DEFAULT
+     ========================================================= */
+  function pickUrl() {
+    var hour = new Date().getHours();
+    return SPECIAL_HOURS.indexOf(hour) !== -1 ? LINK_SPECIAL : LINK_DEFAULT;
+  }
+
+  /* =========================================================
+     3. XỬ LÝ NÚT BẤM
      ========================================================= */
   var openBtn = document.getElementById("openBtn");
   var webLink = document.getElementById("webLink");
 
-  webLink.href = TARGET_URL;
+  /* Link phụ cũng phản ánh đúng giờ hiện tại */
+  webLink.href = pickUrl();
 
   var launched = false;
 
   function launch() {
     if (launched) return;
     launched = true;
-
-    // Chuyển hướng sang link đích (mở ở tab hiện tại)
-    window.location.href = TARGET_URL;
+    window.location.href = pickUrl();
   }
 
   openBtn.addEventListener("click", launch);
