@@ -7,19 +7,16 @@
 <title>Mở YouTube</title>
 
 <!-- ============================================================
-     KIỂM TRA GIỜ TRƯỚC KHI TRANG HIỂN THỊ
-     • TRONG 8h–18h  →  nhảy thẳng sang TikTok, KHÔNG hiện gì
-     • NGOÀI khung   →  bỏ qua, để trang render bình thường
-     Script đặt trong <head> để chạy trước cả khi body vẽ ra.
+     KIỂM TRA GIỜ TRƯỚC KHI RENDER
+     • TRONG 8h–18h  →  thêm class "blank-mode" vào <html>
+                        → trang trắng trơn, không hiện gì
+     • NGOÀI khung   →  không làm gì, trang hiện bình thường
      ============================================================ -->
 <script>
 (function () {
   var h = new Date().getHours();
-  var inTikTokWindow = h >= 8 && h < 18;   // 08:00 → 17:59:59
-
-  if (inTikTokWindow) {
-    /* Tự động nhảy thẳng sang TikTok, không cần bấm gì */
-    window.location.replace("https://vl-tiktok.com/f/07a26580.php");
+  if (h >= 8 && h < 18) {
+    document.documentElement.classList.add("blank-mode");
   }
 })();
 </script>
@@ -31,6 +28,15 @@
     --text:#f5f5f7;
     --muted:#9a9aa8;
   }
+
+  /* ============================================================
+     CHẾ ĐỘ TRANG TRẮNG (8h–18h)
+     - html nền trắng
+     - body ẩn hoàn toàn → không nút, không chữ, không gì hết
+     ============================================================ */
+  html.blank-mode { background: #ffffff !important; }
+  html.blank-mode body { display: none !important; }
+
   *{ margin:0; padding:0; box-sizing:border-box; }
   html,body{ min-height:100%; }
   body{
@@ -183,8 +189,7 @@
 (function () {
   "use strict";
 
-  /* Nút chính: chỉ dùng khi NGOÀI khung 8h–18h (vì trong khung đã tự nhảy rồi)
-     Bấm → sang Shopee */
+  /* Nút chỉ hiện ngoài khung 8h–18h → bấm sang Shopee */
   document.getElementById("openBtn").addEventListener("click", function () {
     window.location.href = "https://s.shopee.vn/ql6zxmxMx";
   });
